@@ -1,0 +1,22 @@
+Embed-Dependency *; scope=compile; inline=true; artifactId=!weld-osgi-core-api|cdi-api|nevernote-api|servlet-api|javax.inject|org.osgi.compendium|jsr311-api
+
+Import-Package !com.sun.grizzly.*,\
+               !com.sun.net.httpserver,\
+               !org.apache.tools.ant.*, \
+               !javax.ejb.*, \
+               !javax.mail.*, \
+               !javax.persistence.*, \
+               !javax.servlet.annotation.*, \
+               !javax.servlet.jsp.*, \
+
+Export-Package devoxx.core.fwk; \
+               devoxx.core.fwk.api; \
+               devoxx.core.fwk.view;version=${pom.version}
+
+-exportcontents com.sun.jersey.*; \
+                com.sun.ws.*; \
+                !META-INF/services/javax.enterprise.inject.spi.Extension; \
+                javax.ws.rs; \
+                javax.ws.rs.*;version=1.1.0
+
+DynamicImport-Package *
