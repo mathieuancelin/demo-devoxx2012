@@ -4,6 +4,7 @@
  */
 package devoxx.core;
 
+import devoxx.core.db.NotesModel;
 import devoxx.core.fwk.HttpServiceTracker;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.enterprise.context.ApplicationScoped;
@@ -20,9 +21,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Server {
 
     private static final String CONTEXT_ROOT = "/";
-    @Inject
-    @Any
-    Instance<Object> instances;
+    @Inject @Any Instance<Object> instances;
     private ServiceTracker tracker;
     private AtomicBoolean valid = new AtomicBoolean(false);
 
@@ -44,5 +43,6 @@ public class Server {
                 getClass().getClassLoader(),
                 instances, CONTEXT_ROOT);
         this.tracker.open();
+        NotesModel.initDB();
     }
 }
