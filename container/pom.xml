@@ -6,7 +6,7 @@
     <groupId>devoxx</groupId>
     <artifactId>container</artifactId>
     <version>1.2.0-SNAPSHOT</version>
-    <name>Felix Demo Container</name>
+    <name>Nevernote :: Container</name>
 
     <developers>
         <developer>
@@ -30,6 +30,18 @@
         <dependency>
             <groupId>devoxx</groupId>
             <artifactId>nevernote-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>devoxx</groupId>
+            <artifactId>nevernote-fwk</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>devoxx</groupId>
+            <artifactId>wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
     

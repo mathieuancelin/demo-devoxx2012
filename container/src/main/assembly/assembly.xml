@@ -14,6 +14,7 @@
                 <include>devoxx:nevernote-api</include>
                 <include>devoxx:nevernote-core</include>
                 <include>devoxx:nevernote-fwk</include>
+                <include>devoxx:wrapper</include>
                 <include>org.jboss.weld.osgi:weld-osgi-core-integration</include>
                 <include>org.jboss.weld.osgi:weld-osgi-core-api</include>
                 <include>org.jboss.weld.osgi:weld-osgi-core-spi</include>

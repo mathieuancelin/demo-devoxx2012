@@ -1,0 +1,5 @@
+Embed-Dependency *; scope=compile; inline=true;
+
+Export-Package javax.inject;version=1.0.0
+
+DynamicImport-Package *
