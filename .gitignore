@@ -5,3 +5,14 @@
 *.war
 *.ear
 .DS_Store
+
+# Intellij IDEA Files #
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Linux Files #
+.*
+!.gitignore
+*~
