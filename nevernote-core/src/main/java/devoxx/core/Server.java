@@ -19,7 +19,7 @@ import org.osgi.util.tracker.ServiceTracker;
 @ApplicationScoped
 public class Server {
 
-    private static final String CONTEXT_ROOT = "/app";
+    private static final String CONTEXT_ROOT = "/";
     @Inject
     @Any
     Instance<Object> instances;
