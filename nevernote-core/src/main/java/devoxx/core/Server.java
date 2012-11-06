@@ -6,6 +6,7 @@ package devoxx.core;
 
 import devoxx.core.db.NotesModel;
 import devoxx.core.fwk.HttpServiceTracker;
+import devoxx.core.util.SimpleLogger;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -38,6 +39,8 @@ public class Server {
     }
 
     public void start(@Observes BundleContainerEvents.BundleContainerInitialized init) throws Exception {
+        SimpleLogger.enableTrace(true);
+        SimpleLogger.enableColors(true);
         this.tracker = new HttpServiceTracker(
                 init.getBundleContext(),
                 getClass().getClassLoader(),
