@@ -2,11 +2,14 @@ package devoxx.core.controllers;
 
 import devoxx.core.fwk.api.Controller;
 import devoxx.api.*;
+import devoxx.api.Lang.Language;
 import devoxx.core.util.F.Tuple;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.activation.MimetypesFileTypeMap;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -14,13 +17,17 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.jboss.weld.environment.osgi.api.Service;
+import org.jboss.weld.environment.osgi.api.annotation.OSGiService;
+import org.jboss.weld.environment.osgi.api.annotation.Required;
 import org.jboss.weld.environment.osgi.api.annotation.Specification;
 import org.jboss.weld.environment.osgi.api.events.ServiceEvents;
 
 @Path("plugins")
 public class PluginsController implements Controller {
     
-    @Inject Service<Plugin> plugins;
+    @Inject @Required Service<Plugin> plugins;
+    
+    @Inject @OSGiService @Lang(Language.EN) Plugin plugin;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,8 +52,18 @@ public class PluginsController implements Controller {
     
     @GET @Path("messages")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getPopupMessages() {
-        return Collections.emptyList();
+    public List<String> getPopupMessages(@QueryParam("since") Long since) {
+        List<Tuple<Long, String>> messagesCopy = new ArrayList<Tuple<Long, String>>();
+        messagesCopy.addAll(messages);
+        List<String> values = new ArrayList<String>();
+        for (Tuple<Long, String> t : messages) {
+           if (since == null) {
+               values.add("{\"last\":" + t._1 + ", \"message\":\""+ t._2 + "\"}");
+           } else if (t._1 >= since) {
+               values.add("{\"last\":" + t._1 + ", \"message\":\""+ t._2 + "\"}");
+           }
+        }
+        return values;
     }
     
     @GET @Path("installed")
@@ -77,15 +94,18 @@ public class PluginsController implements Controller {
     private ConcurrentHashMap<String, Tuple<String, String>> pluginNames = 
             new ConcurrentHashMap<String, Tuple<String, String>>();
     
+    private List<Tuple<Long, String>> messages = Collections.synchronizedList(new ArrayList<Tuple<Long, String>>());
+    
     public void listenArrival(@Observes @Specification(Plugin.class) ServiceEvents.ServiceArrival evt) {
-        Plugin plugin = evt.getService(Plugin.class);
-        if (!pluginNames.containsKey(plugin.pluginId())) {
-            pluginNames.putIfAbsent(plugin.pluginId(), new Tuple<String, String>(plugin.name(), plugin.desc()));
+        Plugin p = evt.getService(Plugin.class);
+        if (!pluginNames.containsKey(p.pluginId())) {
+            pluginNames.putIfAbsent(p.pluginId(), new Tuple<String, String>(p.name(), p.desc()));
+            messages.add(new Tuple<Long, String>(System.currentTimeMillis(), "Plugin " + p.name() + " is now available for use. Enjoy ;-)"));
         }
     }
     
     public void listenDeparture(@Observes @Specification(Plugin.class) ServiceEvents.ServiceDeparture evt) {
-        Plugin plugin = evt.getService(Plugin.class);
-        pluginNames.remove(plugin.pluginId());
+        Plugin p = evt.getService(Plugin.class);
+        pluginNames.remove(p.pluginId());
     }
 }
