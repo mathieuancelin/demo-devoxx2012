@@ -30,7 +30,7 @@
         <module>container</module>
         <module>wrapper</module>
     </modules>
-    
+
     <build>
         <pluginManagement>
             <plugins>
@@ -45,6 +45,13 @@
                                 -target/classes/META-INF/${project.artifactId}.bnd
                             </_include>
                         </instructions>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
                     </configuration>
                 </plugin>
             </plugins>
