@@ -56,6 +56,18 @@ public final class DB {
         }
     }
     
+    public void startConnection() {
+        currentConnectionProvider.set(provider);
+        provider.beforeRequest();
+        Connection connection = provider.get();
+    }
+    
+    public void closeConnection() {
+        SimpleLogger.trace("Close connection");
+        provider.afterRequest();
+        currentConnectionProvider.remove();
+    }
+    
     /** Public API **/
     
     public static DB DB(ConnectionProvider provider) {
@@ -739,7 +751,7 @@ public final class DB {
         }
 
         public void delete(Long id) { 
-            sql(deleteStatement).executeUpdate();
+            sql(deleteStatement.replace("{id}", id + "")).executeUpdate();
         }
 
         public void deleteAll() {

@@ -9,8 +9,10 @@ import org.h2.Driver;
 import static devoxx.core.db.DB.*;
 import devoxx.core.db.NotesModel.Note;
 import devoxx.core.util.F.Function;
+import devoxx.core.util.F.Option;
 import devoxx.core.util.F.Unit;
 import java.sql.Connection;
+import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 public class NotesModel {

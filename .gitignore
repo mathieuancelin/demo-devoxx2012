@@ -16,3 +16,8 @@
 .*
 !.gitignore
 *~
+/nevernote-api/target/
+/nevernote-fwk/target/
+/nevernote-core/target/
+/wrapper/target/
+/container/target/
