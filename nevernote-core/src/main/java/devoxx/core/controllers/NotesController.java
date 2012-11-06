@@ -88,14 +88,17 @@ public class NotesController implements Controller {
             @Override
             public Note apply(Connection _) {
                 for (Note note : Notes._.findById(id)) {
+                    boolean changed = false;
                     try {
                         note.title = title;
                         note.content = content;
-                        boolean changed = (note.done == done);
+                        changed = (note.done == done);
                         note.done = done;
                         return Notes._.update(note);
                     } finally {
-                        evt.fire(new InterBundleEvent(new NoteDoneEvent(note.id, note.date, note.title, note.content), NoteDoneEvent.class));
+                        if (changed) {
+                            evt.fire(new InterBundleEvent(new NoteDoneEvent(note.id, note.date, note.title, note.content), NoteDoneEvent.class));
+                        }
                     }
                 }
                 return null;
