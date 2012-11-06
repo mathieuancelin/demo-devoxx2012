@@ -1,1 +1,1 @@
-Export-Package org.jboss.weld.osgi.examples.web.api;version=${pom.version}
+Export-Package devoxx.api;version=${pom.version}
