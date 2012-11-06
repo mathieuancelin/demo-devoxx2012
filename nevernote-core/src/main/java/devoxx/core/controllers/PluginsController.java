@@ -6,10 +6,8 @@ import devoxx.api.Lang.Language;
 import devoxx.core.util.F.Tuple;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.activation.MimetypesFileTypeMap;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -21,6 +19,8 @@ import org.jboss.weld.environment.osgi.api.annotation.OSGiService;
 import org.jboss.weld.environment.osgi.api.annotation.Required;
 import org.jboss.weld.environment.osgi.api.annotation.Specification;
 import org.jboss.weld.environment.osgi.api.events.ServiceEvents;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 @Path("plugins")
 public class PluginsController implements Controller {
@@ -28,6 +28,8 @@ public class PluginsController implements Controller {
     @Inject @Required Service<Plugin> plugins;
     
     @Inject @OSGiService @Lang(Language.EN) Plugin plugin;
+    
+    @Inject BundleContext context;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -66,12 +68,24 @@ public class PluginsController implements Controller {
         return values;
     }
     
-    @GET @Path("installed")
+    @GET @Path("active")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getInstalledBundles() {
+    public List<String> getActivePlugins() {
         List<String> names = new ArrayList<String>();
         for(Tuple<String, String> t : pluginNames.values()) {
             names.add(t._1);
+        }
+        return names;
+    }
+    
+    @GET @Path("installed")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<String> getInstalledPlugins() {
+        List<String> names = new ArrayList<String>();
+        for(Bundle bundle : context.getBundles()) {
+            if (bundle.getSymbolicName().contains("plugin")) {
+                names.add(bundle.getSymbolicName());
+            }
         }
         return names;
     }
