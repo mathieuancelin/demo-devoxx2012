@@ -40,7 +40,7 @@ public class PluginsController implements Controller {
     }
     
     @GET @Path("{pluginId}/apply")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String apply(@PathParam("pluginId") String pluginid, @FormParam("content") String content) {
         for (Plugin plugin : plugins) {
             if (plugin.pluginId().equals(pluginid)) {
