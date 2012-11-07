@@ -29,6 +29,7 @@
         <module>nevernote-fwk</module>
         <module>container</module>
         <module>wrapper</module>
+        <module>nevernote-plugin-translator</module>
     </modules>
 
     <build>

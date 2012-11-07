@@ -59,7 +59,7 @@ public class HttpServiceTracker extends ServiceTracker {
     @Override
     public void removedService(ServiceReference ref, Object service) {
         if (httpService == service) {
-            httpService.unregister(contextRoot + "/static");
+            httpService.unregister(contextRoot + "static");
             reg.unregister();
             httpService = null;
         }
@@ -69,7 +69,7 @@ public class HttpServiceTracker extends ServiceTracker {
     private void registerResources() {
         try {
             HttpContext myHttpContext = new OSGiHttpContext(loader);
-            httpService.registerResources(contextRoot + "/static", "/tmp/static", myHttpContext);
+            httpService.registerResources(contextRoot + "static", "/tmp/static", myHttpContext);
         } catch (NamespaceException ex) {
             Logger.getLogger(HttpServiceTracker.class.getName()).log(Level.SEVERE, null, ex);
         }
