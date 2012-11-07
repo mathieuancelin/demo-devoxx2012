@@ -96,7 +96,7 @@ public class NotesController implements Controller {
                         note.done = done;
                         return Notes._.update(note);
                     } finally {
-                        if (changed) {
+                        if (!done) {
                             evt.fire(new InterBundleEvent(new NoteDoneEvent(note.id, note.date, note.title, note.content), NoteDoneEvent.class));
                         }
                     }

@@ -41,7 +41,7 @@ public class PluginsController implements Controller {
         return ids;
     }
     
-    @GET @Path("{pluginId}/apply")
+    @GET @Path("apply/{pluginId}")
     @Produces(MediaType.TEXT_PLAIN)
     public String apply(@PathParam("pluginId") String pluginid, @FormParam("content") String content) {
         for (Plugin plugin : plugins) {
@@ -61,7 +61,7 @@ public class PluginsController implements Controller {
         for (Tuple<Long, String> t : messages) {
            if (since == null) {
                values.add("{\"last\":" + t._1 + ", \"message\":\""+ t._2 + "\"}");
-           } else if (t._1 >= since) {
+           } else if (t._1 > since) {
                values.add("{\"last\":" + t._1 + ", \"message\":\""+ t._2 + "\"}");
            }
         }
@@ -91,7 +91,7 @@ public class PluginsController implements Controller {
     }
     
     @GET
-    @Path("{pluginId}/{route}")
+    @Path("res/{pluginId}/{route}")
     public Response getRes(@PathParam("pluginId") String pluginid, @PathParam("route") String route) {
         for (Plugin plugin : plugins) {
             if (plugin.pluginId().equals(pluginid)) {
