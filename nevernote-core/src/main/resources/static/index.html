@@ -9,6 +9,11 @@
     <script src="js/mustache.js"></script>
     <script src="js/underscore.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .done-true {
+            text-decoration: line-through;        
+        }
+    </style>
 </head>
 <body>
   <header class="container">
@@ -143,7 +148,9 @@
           console.log("done")
           e.preventDefault()
           var id = $(this).data('id')
-        }) 
+          $.post('/notes/done/' + id, function(data) {
+              updateTasks()
+          })        }) 
         $(".edittask").live('click', function(e) {
           console.log("edit")
           e.preventDefault()

@@ -104,5 +104,26 @@ public class NotesController implements Controller {
                 return null;
             }
         });
-    }    
+    }
+    
+    @POST @Path("done/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Note done(@PathParam("id") final Long id) {
+        return NotesModel.DB.withConnection(new F.Function<Connection, Note>() {
+            @Override
+            public Note apply(Connection _) {
+                for (Note note : Notes._.findById(id)) {
+                    try {
+                        note.done = !note.done;
+                        return Notes._.update(note);
+                    } finally {
+                        if (!note.done) {
+                            evt.fire(new InterBundleEvent(new NoteDoneEvent(note.id, note.date, note.title, note.content), NoteDoneEvent.class));
+                        }
+                    }
+                }
+                return null;
+            }
+        });
+    }
 }
