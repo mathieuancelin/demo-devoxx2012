@@ -1,5 +1,6 @@
 package devoxx.core.controllers;
 
+import devoxx.api.NoteDoneEvent;
 import devoxx.core.db.NotesModel;
 import devoxx.core.db.NotesModel.Notes;
 import devoxx.core.db.NotesModel.Note;
@@ -15,14 +16,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import javax.ws.rs.*;
+import org.jboss.weld.environment.osgi.api.events.InterBundleEvent;
 
-/**
- *
- * @author mathieuancelin
- */
 @Path("notes")
 public class NotesController implements Controller {
+    
+    @Inject Event<InterBundleEvent> evt;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -86,10 +88,18 @@ public class NotesController implements Controller {
             @Override
             public Note apply(Connection _) {
                 for (Note note : Notes._.findById(id)) {
-                    note.title = title;
-                    note.content = content;
-                    note.done = done;
-                    return Notes._.update(note);
+                    boolean changed = false;
+                    try {
+                        note.title = title;
+                        note.content = content;
+                        changed = (note.done == done);
+                        note.done = done;
+                        return Notes._.update(note);
+                    } finally {
+                        if (changed) {
+                            evt.fire(new InterBundleEvent(new NoteDoneEvent(note.id, note.date, note.title, note.content), NoteDoneEvent.class));
+                        }
+                    }
                 }
                 return null;
             }
