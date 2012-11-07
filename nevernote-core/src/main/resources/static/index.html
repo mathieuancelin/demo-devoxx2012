@@ -68,13 +68,14 @@
     <div>
         <script type="text/html" id="taskline_tmpl">
             <tr>
-                <td>{{title}}</t><td>{{content}}</t>
+                <td>{{title}}</t>
+                <td>{{content}}</t>
                 <td>
-                    <button data-id="{{id}}" id="donetask" class="btn btn-success"><i class="icon-ok"></i></button>
+                    <button data-id="{{id}}" class="btn btn-success donetask"><i class="icon-ok"></i></button>
                     &nbsp;
-                    <button data-id="{{id}}" id="edittask" class="btn btn-primary"><i class="icon-edit"></i></button>
+                    <button data-id="{{id}}" class="btn btn-primary edittask"><i class="icon-edit"></i></button>
                     &nbsp;
-                    <button data-id="{{id}}" id="deletetask" class="btn btn-danger"><i class="icon-trash"></i></button>
+                    <button data-id="{{id}}" class="btn btn-danger deletetask"><i class="icon-trash"></i></button>
                 </td>                 
             </tr>
         </script>
@@ -134,29 +135,28 @@
                 })
             })
         }
-        
-        $('#donetask').click(function(e) {
+
+        $("#submitFastNoteButton").click(addFastNote)
+        $("#showNewNote").hide()
+        updateTasks()
+        $(".donetask").live('click', function(e) {
+          console.log("done")
           e.preventDefault()
           var id = $(this).data('id')
         }) 
-        $('#edittask').click(function(e) {
+        $(".edittask").live('click', function(e) {
+          console.log("edit")
           e.preventDefault()
           var id = $(this).data('id')
         }) 
-        $('#deletetask').click(function(e) {
+        $(".deletetask").live('click', function(e) {
+          console.log("delete")
           e.preventDefault()
-          console.log("lcik")
           var id = $(this).data('id')
           $.ajax({url:'/notes/' + id, type:'delete', complete: function(data) {
                updateTasks()
           }})
         }) 
-        
-        $("#showNewNoteButton").click(showNewNote);
-        $("#hideNewNoteButton").click(hideNewNote);
-        $("#submitFastNoteButton").click(addFastNote);
-        $("#showNewNote").hide();
-        updateTasks()
     });    
   </script>
 </body>

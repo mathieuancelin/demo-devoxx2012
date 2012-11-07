@@ -47,6 +47,9 @@ public class OSGiHttpContext implements HttpContext {
         if (name.endsWith(".css")) {
             return "text/css";
         }
+        if (name.endsWith(".js")) {
+            return "text/javascript";
+        }
         return "*"; // TODO map with real types
     }
 }
