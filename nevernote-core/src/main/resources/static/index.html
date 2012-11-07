@@ -73,8 +73,8 @@
     <div>
         <script type="text/html" id="taskline_tmpl">
             <tr>
-                <td>{{title}}</t>
-                <td>{{content}}</t>
+                <td class="{{cl}}">{{title}}</t>
+                <td class="{{cl}}">{{content}}</t>
                 <td>
                     <button data-id="{{id}}" class="btn btn-success donetask"><i class="icon-ok"></i></button>
                     &nbsp;
@@ -136,7 +136,12 @@
             $('#tasks').empty()
             $.get('/notes', function(data) {
                 data.note.forEach(function(elem, array, idx) {
-                    $('#tasks').append(render("#taskline_tmpl", {title: elem.title, content: elem.content, id: elem.id}))
+                    var cl = ""
+                    console.log(elem.done)
+                    if (elem.done == "true") {
+                        cl = "done-true"
+                    }
+                    $('#tasks').append(render("#taskline_tmpl", {title: elem.title, content: elem.content, id: elem.id, cl: cl}))
                 })
             })
         }
