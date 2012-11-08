@@ -45,7 +45,7 @@ public class PluginsController implements Controller {
         return "[" + Joiner.on(", ").join(ids) + "]";
     }
     
-    @GET @Path("apply/{pluginId}")
+    @POST @Path("apply/{pluginId}")
     @Produces(MediaType.TEXT_PLAIN)
     public String apply(@PathParam("pluginId") String pluginid, @FormParam("content") String content) {
         for (Plugin plugin : plugins) {

@@ -56,7 +56,7 @@
                             <td>
                                 <button data-id="{{id}}" class="btn {{btndoneclass}} donetask"><i class="{{doneicon}} icon-white"></i></button>
                                 &nbsp;
-                                <button data-id="{{id}}" class="btn btn-primary edittask"><i class="icon-edit icon-white"></i></button>
+                                <a href="edit.html#{{id}}" data-id="{{id}}" class="btn btn-primary edittask"><i class="icon-edit icon-white"></i></a>
                                 &nbsp;
                                 <button data-id="{{id}}" class="btn btn-danger deletetask"><i class="icon-trash icon-white"></i></button>
                             </td>                 
@@ -145,9 +145,9 @@
                         updateTasks()
                     })        }) 
                 $(".edittask").live('click', function(e) {
-                    console.log("edit")
-                    e.preventDefault()
-                    var id = $(this).data('id')
+                    //console.log("edit")
+                    //e.preventDefault()
+                    //var id = $(this).data('id')
                 }) 
                 $(".deletetask").live('click', function(e) {
                     console.log("delete")

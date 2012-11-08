@@ -55,8 +55,20 @@
                         <input type="text" id="inputTitle" placeholder="Title" class="span8">
                     </div>
                 </div>
-                <div id="plugins">
-                    
+                <div class="control-group">
+                    <div class="controls">    
+                        <label class="checkbox">
+                            <input id="inputDone" type="checkbox"> Done
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Plugins</label>
+                    <div class="controls">
+                        <div id="plugins">
+
+                        </div>
+                    </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="inputContent">Content</label>
@@ -66,8 +78,8 @@
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                    <button type="button" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
-                    <button type="button" class="btn btn-primary"><i class="icon-hdd icon-white"></i> Save</button>
+                    <button type="button" id="delete" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
+                    <button type="button" id="save" class="btn btn-primary"><i class="icon-hdd icon-white"></i> Save</button>
                     </div>
                 </div>
                 </form>
@@ -83,17 +95,79 @@
             function render(templateId, view) {
                 return Mustache.render( $(templateId).html(), view )
             }
+            function param(){
+                var strReturn = "";
+                var strHref = window.location.href;
+                if ( strHref.indexOf("#") > -1 ){
+                    strReturn = strHref.substr(strHref.indexOf("#") + 1);//.toLowerCase();
+                }
+                return unescape(strReturn);
+            }
             $(document).ready(function() {
+                
                 function updatePlugins() {
                     $('#plugins').empty()
                     $.get('/plugins', function(data) {
+                        var content = ''
                         data.forEach(function(elem, array, id) {
-                            $('#plugins').append('<button class="btn" id="' + elem.id 
+                            content += '<button class="btn plugin" id="' + elem.id 
                                 + '"><i class="' + elem.icon + '"></i> ' 
-                                + elem.name + '</button>')
+                                + elem.name + '</button>'
                         })
+                        if ($('#plugins').html() != content) {
+                            $('#plugins').html(content)
+                        }
                     })
                 }
+                $('.plugin').live('click', function(e) {
+                    e.preventDefault()
+                    var id = $(this).attr('id')
+                    var content = $('#inputContent').val()
+                    $.post('/plugins/apply/' + id, {content: content}, function(data) {
+                        $('#inputContent').val(data)
+                    })
+                })
+                $('#delete').click(function(e) {
+                    e.preventDefault()
+                    var id = param()
+                    $.ajax({url:'/notes/' + id, type:'delete', complete: function(data) {
+                        window.location.href = "/static/"
+                    }})
+                })
+                $('#save').click(function(e) {
+                    e.preventDefault()
+                    if (param() != "") {
+                       var id = param()
+                       var content = $('#inputContent').val()
+                       var title = $('#inputTitle').val()
+                       var done = $('#inputDone').is(':checked')
+                       $.ajax({url:'/notes/' + id, type:'post', data: {title:title, content:content, done:done }, complete: function(data) {
+                            console.log(data)
+                            window.location.href = "/static/edit.html#" + JSON.parse(data.responseText).id 
+                       }}) 
+                    } else {
+                       var content = $('#inputContent').val()
+                       var title = $('#inputTitle').val()
+                       var done = $('#inputDone').is(':checked')
+                       $.ajax({url:'/notes', type:'put', data: {title:title, content:content, done:done }, complete: function(data) {
+                            console.log(data)
+                            window.location.href = "/static/edit.html#" + JSON.parse(data.responseText).id 
+                       }}) 
+                    }
+                    
+                })
+                $('#delete').attr('disabled', 'disabled')
+                if (param() != "") {
+                    $.get('/notes/' + param(), function(data) {
+                        $('#inputContent').val(data.content)
+                        $('#inputTitle').val(data.title)
+                        if (data.done == 'true') {
+                            $('#inputDone').attr('checked', '')
+                        }
+                        $('#delete').removeAttr('disabled')
+                    })
+                }
+                updatePlugins()
                 setInterval(updatePlugins, 1000)
             });    
         </script>
