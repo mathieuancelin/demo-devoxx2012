@@ -63,6 +63,9 @@ public class OSGiHttpContext implements HttpContext {
     @Override
     public URL getResource(String name) {
         String actualName = name.replace("tmp/", "");
+        if (actualName.equals("static/")) {
+            actualName = "static/index.html";
+        }
         if (devMode) {
             try {
                 URL url = new File(devPath, actualName).toURI().toURL();

@@ -36,19 +36,18 @@
   <section class="container">
     <div class=row>
       <div id="showFastNewNote">
-        <form class="span4 offset4">
-          <div class="control-group">
-            <label class="control-label" for="fastNoteText">Add fast note: </label>
-            <div class="controls">
-              <div class="input-append">
-                <input id="fastNoteTitle" type="text"> 
-                <input id="fastNoteContent" type="text">            
-                <button type="button" id="submitFastNoteButton" class="btn"><i class="icon-ok"></i></button>
-                <button type="button" id="showNewNoteButton" class="btn"><i class="icon-plus"></i></button>
-              </div>
+        <div class="controls form-inline span9 offset4">
+            <form class="form-inline">
+            <label>Fast note</label>
+            <input id="fastNoteTitle" type="text" placeholder="Title">
+            <div class="input-append">
+            <input id="fastNoteContent" type="text" placeholder="Content">
+            <button type="button" id="submitFastNoteButton" class="btn"><i class="icon-ok"></i></button>
+            <a href="#" class="btn"><i class="icon-plus"></i></a>
+            <a href="settings.html" id="showSettingsButton" class="btn btn-primary"><i class="icon-wrench icon-white"></i></a>
             </div>
-          </div>
-        </form>
+            </form>  
+        </div>
       </div>
       <div id="showNewNote">
         <form class="span4 offset4">
@@ -63,9 +62,6 @@
             </div>
           </div>
         </form>
-      </div>    
-      <div class="span1 offset3">
-        <a href="settings.html" id="showSettingsButton" class="btn btn-large btn-primary"><i class="icon-wrench icon-white"></i></a>
       </div>
     </div>
   </section>  
@@ -96,9 +92,10 @@
             </tbody>
         </table>
     </div>
-  </section>   
-  <footer class="container">
-    <p class="pull-right">
+  </section> 
+  <hr/>
+  <footer class="footer">
+    <p class="offset3">
       Made with <a>Weld-OSGi framework</a> for <a>Devoxx 2012</a> presentation by <a>Mathieu Ancelin</a> & <a>Matthieu Clochard</a>
     </p>
   </footer>
@@ -108,19 +105,6 @@
         return Mustache.render( $(templateId).html(), view )
     }
     $(document).ready(function() {
-        var showNewNote = function(e) {
-            e.preventDefault()
-            $("#showFastNewNote").hide();
-            $("#showPluginsConfiguration").hide();
-            $("#showNewNote").show();
-        }
-        
-        var hideNewNote = function(e) {
-            e.preventDefault()
-            $("#showNewNote").hide();
-            $("#showPluginsConfiguration").hide();
-            $("#showFastNewNote").show();
-        }
         var addFastNote = function(event) {
             event.preventDefault();
             var title = $("#fastNoteTitle").val()
@@ -131,7 +115,6 @@
                 updateTasks()
             }})
         }
-        
         function appendTask(elem) {
             var doneclass = ''
             var btndoneclass = 'btn-inverse'
@@ -152,7 +135,6 @@
                 })
             ) 
         }
-        
         function updateTasks() {
             $('#tasks').empty()
             $.get('/notes', function(data) {
@@ -169,7 +151,6 @@
                 }
             })
         }
-
         $("#submitFastNoteButton").click(addFastNote)
         $("#showNewNote").hide()
         updateTasks()
