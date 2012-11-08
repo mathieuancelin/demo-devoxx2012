@@ -133,19 +133,19 @@
                         appendPlugin(elem)
                     })
                 }
+                $.get('/plugins/active', function (data) {
+                    console.log("tOTO2")
+                    if (data != null && data != null && data != undefined) {
+                        data.forEach(function (name, array, idx) {
+                            var elem = "{\"name\":\"" + name + "\",\"active\":\"true\"}"
+                            appendPlugin(elem)
+                        })
+                    }
+                    console.log("tOTO3")
+                    $('#plugins').append(render("#pluginfooter_tmpl",{}))
+                    console.log("tOTO4")
+                })
             })
-            $.get('/plugins/active', function (data) {
-                console.log("tOTO2")
-                if (data != null && data != null && data != undefined) {
-                    data.forEach(function (name, array, idx) {
-                        var elem = "{\"name\":\"" + name + "\",\"active\":\"true\"}"
-                        appendPlugin(elem)
-                    })
-                }
-            })
-            console.log("tOTO3")
-            $('#plugins').append(render("#pluginfooter_tmpl",{}))
-            console.log("tOTO4")
         }
         updatePlugins()
     });

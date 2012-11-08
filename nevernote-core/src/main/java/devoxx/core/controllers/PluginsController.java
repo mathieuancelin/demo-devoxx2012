@@ -77,7 +77,7 @@ public class PluginsController implements Controller {
     public String getActivePlugins() {
         List<String> names = new ArrayList<String>();
         for(Tuple<String, String> t : pluginNames.values()) {
-            names.add(t._1);
+            names.add("\"" + t._1 + "\"");
         }
         return "[" + Joiner.on(',').join(names) + "]";
     }
@@ -88,7 +88,7 @@ public class PluginsController implements Controller {
         List<String> names = new ArrayList<String>();
         for(Bundle bundle : context.getBundles()) {
             if (bundle.getSymbolicName().contains("plugin")) {
-                names.add(bundle.getSymbolicName());
+                names.add("\"" + bundle.getSymbolicName() + "\"");
             }
         }
         return "[" + Joiner.on(',').join(names) + "]";
