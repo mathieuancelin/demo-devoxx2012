@@ -1,99 +1,154 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>Nevernote : never forget your notes</title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
     <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/mustache.js"></script>
+    <script src="js/underscore.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .done-true {
+            text-decoration: line-through;
+        }
+
+        html, body {
+            background-color: #fff;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+
+        .container > footer p {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <header class="container">
-    <div class="page-header">
-      <div class="row">
-        <div class="span8">
-          <img />
-        </div>
-        <div class="span4">
-          <p>
-            <h1>Nevernote</h1>
-            <img />
-          </p>
-          <p>
-            <h1><small>Never forget your notes</small></h1>
-          </p>
-        </div>
-      </div>
-  </header>  
-  <section class="container">
-    <div class=row>        
-      <div id="showPluginsConfiguration" class="">
-        <form class="span4 offset4 form-horizontal">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="success">
-                <td>Plugin A</td>
-                <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-small"><i class="icon-stop"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-refresh"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-trash"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="error">
-                <td>Plugin B</td>
-                <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-small"><i class="icon-play"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-trash"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="success">
-                <td>Plugin A</td>
-                <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-small"><i class="icon-stop"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-refresh"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-trash"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="info">
-                <td>Add a plugin</td>
-                <td>
-                  <button type="button" class="btn btn-small"><i class="icon-folder-open"></i></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <a href="index.html" id="hideSettingsButton" class="btn"><i class="icon-ok"></i></a>
-        </form>
-      </div>
-    </div>
-  </section>  
-  <section class="container">
-    <div>
-    </div>
-  </section>   
-  <footer class="container">
-    <p class="pull-right">
-      Made with <a>Weld-OSGi framework</a> for <a>Devoxx 2012</a> presentation by <a>Mathieu Ancelin</a> & <a>Matthieu Clochard</a>
-    </p>
-  </footer>
-  
-  <script>
-    $(document).ready(function() {
+<div class="container">
+    <header class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="/static/" class="brand">Nevernote</a>
+                <ul class="nav">
+                    <li><a href="edit.html"><i class="icon-plus icon-white"></i> Add a new note</a></li>
+                    <li><a href="settings.html"><i class="icon-wrench icon-white"></i> Plugin settings</a></li>
+                    <li><a href="#">&nbsp;&nbsp;&nbsp;Fast note &nbsp;</a></li>
+                    <li>
+                        <form class="navbar-form form-inline pull-right">
+                            <input id="fastNoteTitle" type="text" class="span2" placeholder="Title">
 
-    });    
-  </script>
+                            <div class="input-append">
+                                <input id="fastNoteContent" type="text" class="span2" placeholder="Content">
+                                <button type="button" id="submitFastNoteButton" class="btn"><i class="icon-ok"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <section class="container">
+        <div class="span6 offset3">
+            <script type="text/html" id="pluginline_tmpl">
+                <tr class="{{stateClass}}">
+                    <td>{{pluginName}}</td>
+                    <td>
+                        <button data-id="{{pluginName}}{{BtnState}}" class="btn {{btnStateClass}}"><i
+                                class="{{btnStateIcon}} icon-white"></i></button>
+                        &nbsp;
+                        <button data-id="{{pluginName}}{{BtnRefresh}}" class="btn btn-primary {{btnRefreshClass}}"><i
+                                class="icon-refresh icon-white"></i>
+                        </button>
+                        &nbsp;
+                        <button data-id="{{pluginName}}{{BtnRefresh}}" class="btn btn-danger"><i
+                                class="icon-trash icon-white"></i>
+                        </button>
+                    </td>
+                </tr>
+            </script>
+            <script type="text/html" id="pluginfooter_tmpl">
+                <tr class="info">
+                    <td>Add a plugin</td>
+                    <td>
+                        <button type="button" class="btn btn-primary"><i class="icon-folder-open"></i></button>
+                    </td>
+                </tr>
+            </script>
+            <table class="table table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th width="75%">Plugin</th>
+                    <th width="25%">Actions</th>
+                </tr>
+                </thead>
+                <tbody id="plugins">
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+<footer class="container">
+    <p class="pull-right">
+        Made with <a>Weld-OSGi framework</a> for <a>Devoxx 2012</a> presentation by <a>Mathieu Ancelin</a> & <a>Matthieu
+        Clochard</a>
+    </p>
+</footer>
+<script>
+    function render(templateId, view) {
+        return Mustache.render($(templateId).html(), view)
+    }
+    $(document).ready(function () {
+        function appendPlugin(elem) {
+            var stateClass = 'error'
+            var btnStateClass = 'btn-success'
+            var btnStateIcon = 'icon-play'
+            var btnRefreshClass = 'disabled'
+            if (elem.active == 'true') {
+                stateClass = 'success'
+                btnStateClass = 'btn-danger'
+                btnStateIcon = 'icon-stop'
+                btnRefreshClass = ''
+            }
+            $('#plugins').append(render("#pluginline_tmpl",
+                    {
+                        pluginName:elem.name,
+                        stateClass:stateClass,
+                        btnStateClass:btnStateClass,
+                        btnStateIcon:btnStateIcon,
+                        btnRefreshClass:btnStateIcon
+                    }))
+        }
+        function updatePlugins() {
+            $('#plugins').empty()
+            $.get('/plugins/installed', function (data) {
+                console.log("tOTO1")
+                if (data != null && data != null && data != undefined) {
+                    data.forEach(function (name, array, idx) {
+                        var elem = "{\"name\":\"" + name + "\",\"active\":\"false\"}"
+                        appendPlugin(elem)
+                    })
+                }
+            })
+            $.get('/plugins/active', function (data) {
+                console.log("tOTO2")
+                if (data != null && data != null && data != undefined) {
+                    data.forEach(function (name, array, idx) {
+                        var elem = "{\"name\":\"" + name + "\",\"active\":\"true\"}"
+                        appendPlugin(elem)
+                    })
+                }
+            })
+            console.log("tOTO3")
+            $('#plugins').append(render("#pluginfooter_tmpl",{}))
+            console.log("tOTO4")
+        }
+        updatePlugins()
+    });
+</script>
 </body>
 </html>
