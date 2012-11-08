@@ -132,29 +132,41 @@
             }})
         }
         
+        function appendTask(elem) {
+            var doneclass = ''
+            var btndoneclass = 'btn-inverse'
+            var doneicon = 'icon-ok'
+            if (elem.done == "true") {
+                doneclass = 'done-true'
+                btndoneclass = 'btn-success'
+                doneicon = 'icon-ban-circle'
+            }
+            $('#tasks').append(render("#taskline_tmpl", 
+                {
+                    title: elem.title, 
+                    content: elem.content, 
+                    id: elem.id, 
+                    doneclass: doneclass,
+                    btndoneclass: btndoneclass,
+                    doneicon: doneicon
+                })
+            ) 
+        }
+        
         function updateTasks() {
             $('#tasks').empty()
             $.get('/notes', function(data) {
-                data.note.forEach(function(elem, array, idx) {
-                    var doneclass = ''
-                    var btndoneclass = 'btn-inverse'
-                    var doneicon = 'icon-ok'
-                    if (elem.done == "true") {
-                        doneclass = 'done-true'
-                        btndoneclass = 'btn-success'
-                        doneicon = 'icon-ban-circle'
-                    }
-                    $('#tasks').append(render("#taskline_tmpl", 
-                        {
-                            title: elem.title, 
-                            content: elem.content, 
-                            id: elem.id, 
-                            doneclass: doneclass,
-                            btndoneclass: btndoneclass,
-                            doneicon: doneicon
+                if (data != null && data.note != null && data.note != undefined) {
+                    if (data.note instanceof Array) {
+                        data.note.forEach(function(elem, array, idx) {
+                            appendTask(elem)
                         })
-                    )
-                })
+                    } else {
+                        appendTask(data.note)
+                    }
+                } else {
+                   $('#tasks').append("<tr><td>No task available ...</td><td></td><td></td></tr>") 
+                }
             })
         }
 

@@ -50,7 +50,6 @@ public class OSGiHttpContext implements HttpContext {
             } 
         }
         if (devMode) {
-            SimpleLogger.info("Application started in dev mode");
             SimpleLogger.info("Static resources will be dynamically loaded from {}", devPath.getAbsolutePath());
         }
     }
