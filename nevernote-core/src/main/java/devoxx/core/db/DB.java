@@ -2,10 +2,10 @@ package devoxx.core.db;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
-import devoxx.core.util.F.Function;
-import devoxx.core.util.F.Option;
-import devoxx.core.util.F.Tuple;
-import devoxx.core.util.SimpleLogger;
+import devoxx.core.fwk.F.Function;
+import devoxx.core.fwk.F.Option;
+import devoxx.core.fwk.F.Tuple;
+import devoxx.core.fwk.SimpleLogger;
 import java.lang.reflect.Field;
 import java.sql.Date;
 import java.sql.*;

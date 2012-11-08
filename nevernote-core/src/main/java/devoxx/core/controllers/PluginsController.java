@@ -3,7 +3,7 @@ package devoxx.core.controllers;
 import devoxx.core.fwk.api.Controller;
 import devoxx.api.*;
 import devoxx.api.Lang.Language;
-import devoxx.core.util.F.Tuple;
+import devoxx.core.fwk.F.Tuple;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

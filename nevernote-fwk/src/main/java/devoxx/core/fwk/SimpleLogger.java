@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package devoxx.core.util;
+package devoxx.core.fwk;
 
 import java.io.PrintStream;
 
@@ -47,6 +47,8 @@ public final class SimpleLogger {
     private static final String DEBUG_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_BLUE + SUFFIX;
     private static final String TRACE_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_CYAN + SUFFIX;
     private static final String TRACE_PREFIX = "[TRACE] ";
+    private static final String INFO_PREFIX = "[INFO] ";
+    private static final String ERROR_PREFIX = "[ERROR] ";
 
     private static boolean trace = false;
     private static boolean colors = false;
@@ -78,11 +80,11 @@ public final class SimpleLogger {
     }
 
     public static void error(String message, Object... printable) {
-        print(ERROR_COLOUR, errorOut, message, printable);
+        print(ERROR_COLOUR, errorOut, ERROR_PREFIX + message, printable);
     }
 
     public static void info(String message, Object... printable) {
-        print(INFO_COLOUR, infoOut, message, printable);
+        print(INFO_COLOUR, infoOut, INFO_PREFIX + message, printable);
     }
 
     public static void trace(String message, Object... printable) {

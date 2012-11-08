@@ -39,12 +39,19 @@ public class OSGiHttpContext implements HttpContext {
         if (path.equals("none")) {
             devMode = false;
             devPath = new File("/dev/null");
+        } else if (path.trim().equals("")) {
+            devMode = false;
+            devPath = new File("/dev/null");
         } else {
             devMode = true;
             devPath = new File(path);
             if (!devPath.exists()) {
                 throw new RuntimeException(devPath.getAbsolutePath() + " doesn't exists.");
             } 
+        }
+        if (devMode) {
+            SimpleLogger.info("Application started in dev mode");
+            SimpleLogger.info("Static resources will be dynamically loaded from {}", devPath.getAbsolutePath());
         }
     }
 
@@ -60,7 +67,7 @@ public class OSGiHttpContext implements HttpContext {
         if (devMode) {
             try {
                 URL url = new File(devPath, actualName).toURI().toURL();
-                System.out.println(url.toString());
+                SimpleLogger.trace("Loading resource dynamically {}", url.toString());
                 return url;
             } catch (MalformedURLException ex) {
                 throw new RuntimeException(ex);

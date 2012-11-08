@@ -6,7 +6,7 @@ package devoxx.core;
 
 import devoxx.core.db.NotesModel;
 import devoxx.core.fwk.HttpServiceTracker;
-import devoxx.core.util.SimpleLogger;
+import devoxx.core.fwk.SimpleLogger;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;

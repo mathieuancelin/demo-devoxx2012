@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package devoxx.core.util;
+package devoxx.core.fwk;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
