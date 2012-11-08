@@ -17,7 +17,9 @@
 
 package devoxx.core.fwk;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,9 +28,24 @@ import org.osgi.service.http.HttpContext;
 public class OSGiHttpContext implements HttpContext {
 
     private final ClassLoader loader;
+    
+    private final File devPath;
+    
+    private final boolean devMode;
 
     public OSGiHttpContext(ClassLoader loader) {
         this.loader = loader;
+        String path = System.getProperty("devpath", "none");
+        if (path.equals("none")) {
+            devMode = false;
+            devPath = new File("/dev/null");
+        } else {
+            devMode = true;
+            devPath = new File(path);
+            if (!devPath.exists()) {
+                throw new RuntimeException(devPath.getAbsolutePath() + " doesn't exists.");
+            } 
+        }
     }
 
     @Override
@@ -39,7 +56,18 @@ public class OSGiHttpContext implements HttpContext {
 
     @Override
     public URL getResource(String name) {
-        return loader.getResource(name.replace("tmp/", ""));
+        String actualName = name.replace("tmp/", "");
+        if (devMode) {
+            try {
+                URL url = new File(devPath, actualName).toURI().toURL();
+                System.out.println(url.toString());
+                return url;
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else {
+            return loader.getResource(actualName);
+        }
     }
 
     @Override
