@@ -74,24 +74,24 @@ public class PluginsController implements Controller {
     
     @GET @Path("active")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getActivePlugins() {
+    public String getActivePlugins() {
         List<String> names = new ArrayList<String>();
         for(Tuple<String, String> t : pluginNames.values()) {
             names.add(t._1);
         }
-        return names;
+        return "[" + Joiner.on(',').join(names) + "]";
     }
     
     @GET @Path("installed")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getInstalledPlugins() {
+    public String getInstalledPlugins() {
         List<String> names = new ArrayList<String>();
         for(Bundle bundle : context.getBundles()) {
             if (bundle.getSymbolicName().contains("plugin")) {
                 names.add(bundle.getSymbolicName());
             }
         }
-        return names;
+        return "[" + Joiner.on(',').join(names) + "]";
     }
     
     @GET
