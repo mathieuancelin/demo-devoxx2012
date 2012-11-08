@@ -1,169 +1,101 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>Nevernote : never forget your notes</title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
-    <script src="js/jquery-1.8.2.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-</head>
-<body>
-  <header class="container">
-    <div class="page-header">
-      <div class="row">
-        <div class="span8">
-          <img />
+    <head>
+        <meta charset="utf-8" />
+        <title>Nevernote : never forget your notes</title>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+        <script src="js/jquery-1.8.2.min.js"></script>
+        <script src="js/mustache.js"></script>
+        <script src="js/underscore.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <style type="text/css">
+            .done-true {
+                text-decoration: line-through;        
+            }
+            html, body {
+                background-color: #fff;
+            }
+            body {
+                padding-top: 60px;
+            }
+            .container > footer p {
+                text-align: center; 
+            }
+        </style>
+    </head>
+    <body>    
+        <div class="container">
+            <div class="navbar navbar-fixed-top navbar-inverse">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <a href="/static/" class="brand">Nevernote</a>
+                        <ul class="nav">
+                            <li><a href="edit.html"><i class="icon-plus icon-white"></i> Add a new note</a></li>
+                            <li><a href="settings.html"><i class="icon-wrench icon-white"></i> Plugin settings</a></li>
+                            <li><a href="#">&nbsp;&nbsp;&nbsp;Fast note &nbsp;</a></li>
+                            <li>
+                                <form class="navbar-form form-inline pull-right">
+                                    <input id="fastNoteTitle" type="text" class="span2" placeholder="Title">
+                                    <div class="input-append">
+                                        <input id="fastNoteContent" type="text" class="span2" placeholder="Content">
+                                        <button type="button" id="submitFastNoteButton" class="btn"><i class="icon-ok"></i></button>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul> 
+                    </div>
+                </div>
+            </div>  
+            <section class="container">
+                <form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label" for="inputTitle">Title</label>
+                    <div class="controls">
+                        <input type="text" id="inputTitle" placeholder="Title" class="span8">
+                    </div>
+                </div>
+                <div id="plugins">
+                    
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputContent">Content</label>
+                    <div class="controls">
+                        <textarea id="inputContent" placeholder="Content" rows="10" class="span8"></textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                    <button type="button" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
+                    <button type="button" class="btn btn-primary"><i class="icon-hdd icon-white"></i> Save</button>
+                    </div>
+                </div>
+                </form>
+            </section> 
+            <hr/>
+            <footer>
+                <p>
+                    Made with <a>Weld-OSGi framework</a> for <a>Devoxx 2012</a> presentation by <a>Mathieu Ancelin</a> & <a>Matthieu Clochard</a>
+                </p>
+            </footer>
         </div>
-        <div class="span4">
-          <p>
-            <h1>Nevernote</h1>
-            <img />
-          </p>
-          <p>
-            <h1><small>Never forget your notes</small></h1>
-          </p>
-        </div>
-      </div>
-  </header>  
-  <section class="container">
-    <div class=row>
-      <div id="showFastNewNote">
-        <form class="span4 offset4">
-          <div class="control-group">
-            <label class="control-label" for="fastNoteText">Add fast note: </label>
-            <div class="controls">
-              <div class="input-append">
-                <input id="fastNoteText" type="text">            
-                <button type="button" id="submitFastNoteButton" class="btn"><i class="icon-ok"></i></button>
-                <button type="button" id="showNewNoteButton" class="btn"><i class="icon-plus"></i></button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div id="showNewNote">
-        <form class="span4 offset4">
-          <div class="control-group">
-            <label class="control-label" for="fastNoteText">Add note: </label>
-            <div class="controls">
-              <div class="input-append">
-                <input id="fastNoteText" type="text">
-                <button type="button" class="btn"><i class="icon-ok"></i></button>
-                <button type="button" id="hideNewNoteButton" class="btn"><i class="icon-plus"></i></button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>    
-      <div id="showPluginsConfiguration" class="">
-        <form class="span4 offset4 form-horizontal">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="success">
-                <td>Plugin A</td>
-                <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-small"><i class="icon-stop"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-refresh"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-trash"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="error">
-                <td>Plugin B</td>
-                <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-small"><i class="icon-play"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-trash"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="success">
-                <td>Plugin A</td>
-                <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-small"><i class="icon-stop"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-refresh"></i></button>
-                    <button type="button" class="btn btn-small"><i class="icon-trash"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="info">
-                <td>Add a plugin</td>
-                <td>
-                  <button type="button" class="btn btn-small"><i class="icon-folder-open"></i></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <button type="button" id="hideSettingsButton" class="btn"><i class="icon-ok"></i></button>
-        </form>
-      </div>
-      <div class="span1 offset3">
-        <button type="button" id="showSettingsButton" class="btn btn-large btn-primary"><i class="icon-wrench icon-white"></i></button>
-      </div>
-    </div>
-  </section>  
-  <section class="container">
-    <div>
-    </div>
-  </section>   
-  <footer class="container">
-    <p class="pull-right">
-      Made with <a>Weld-OSGi framework</a> for <a>Devoxx 2012</a> presentation by <a>Mathieu Ancelin</a> & <a>Matthieu Clochard</a>
-    </p>
-  </footer>
-  
-  <script>
-    $(document).ready(function() {
-        var showNewNote = function(e) {
-            e.preventDefault()
-            $("#showFastNewNote").hide();
-            $("#showPluginsConfiguration").hide();
-            $("#showNewNote").show();
-        }
-        
-        var hideNewNote = function(e) {
-            e.preventDefault()
-            $("#showNewNote").hide();
-            $("#showPluginsConfiguration").hide();
-            $("#showFastNewNote").show();
-        }
-        var showSettings = function(e) {
-            e.preventDefault()
-            $("#showFastNewNote").hide();
-            $("#showNewNote").hide();
-            $("#showSettingsButton").hide();
-            $("#showPluginsConfiguration").show();
-        }
-        var hideSettings = function(e) {
-            e.preventDefault()
-            $("#showNewNote").hide();
-            $("#showPluginsConfiguration").hide();
-            $("#showFastNewNote").show();
-            $("#showSettingsButton").show();
-        }
-
-        var addFastNote = function(event) {
-            event.preventDefault();
-            $("#fastNoteText").val("")
-        }
-        
-        $("#showNewNoteButton").click(showNewNote);
-        $("#hideNewNoteButton").click(hideNewNote);
-        $("#showSettingsButton").click(showSettings);
-        $("#hideSettingsButton").click(hideSettings);
-        $("#submitFastNoteButton").click(addFastNote);
-        $("#showNewNote").hide();
-        $("#showPluginsConfiguration").hide();
-    });    
-  </script>
-</body>
+        <script>
+            function render(templateId, view) {
+                return Mustache.render( $(templateId).html(), view )
+            }
+            $(document).ready(function() {
+                function updatePlugins() {
+                    $('#plugins').empty()
+                    $.get('/plugins', function(data) {
+                        data.forEach(function(elem, array, id) {
+                            $('#plugins').append('<button class="btn" id="' + elem.id 
+                                + '"><i class="' + elem.icon + '"></i> ' 
+                                + elem.name + '</button>')
+                        })
+                    })
+                }
+                setInterval(updatePlugins, 1000)
+            });    
+        </script>
+    </body>
 </html>

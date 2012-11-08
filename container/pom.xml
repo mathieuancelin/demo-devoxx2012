@@ -41,6 +41,12 @@
         
         <dependency>
             <groupId>devoxx</groupId>
+            <artifactId>nevernote-plugin-translator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>devoxx</groupId>
             <artifactId>wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>

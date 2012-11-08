@@ -1,5 +1,6 @@
 package devoxx.core.controllers;
 
+import com.google.common.base.Joiner;
 import devoxx.core.fwk.api.Controller;
 import devoxx.api.*;
 import devoxx.api.Lang.Language;
@@ -27,18 +28,21 @@ public class PluginsController implements Controller {
     
     @Inject @Required Service<Plugin> plugins;
     
-    @Inject @OSGiService @Lang(Language.EN) Plugin plugin;
+    //@Inject @OSGiService @Lang(Language.EN) Plugin plugin;
     
     @Inject BundleContext context;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getPluginIds() {
+    public String getPluginIds() {
         List<String> ids = new ArrayList<String>();
         for (Plugin plugin : plugins) {
-            ids.add(plugin.pluginId());
+            ids.add("{\"id\":\"" + plugin.pluginId() 
+                    + "\", \"icon\":\"" + plugin.icon() 
+                    + "\", \"name\":\"" + plugin.name() 
+                    + "\", \"desc\":\"" + plugin.desc() + "\"}");
         }
-        return ids;
+        return "[" + Joiner.on(", ").join(ids) + "]";
     }
     
     @GET @Path("apply/{pluginId}")

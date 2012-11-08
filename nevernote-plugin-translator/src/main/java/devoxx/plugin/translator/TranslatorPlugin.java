@@ -7,10 +7,13 @@ import java.util.Collections;
 import java.util.Map;
 import devoxx.api.Plugin;
 import javax.enterprise.event.Observes;
+import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.annotation.Specification;
+import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
 import org.jboss.weld.environment.osgi.api.events.InterBundleEvent;
 
 @ApplicationScoped
+@Publish
 public class TranslatorPlugin implements Plugin {
     
     public String pluginId() {
@@ -33,8 +36,17 @@ public class TranslatorPlugin implements Plugin {
         return Collections.emptyMap();
     }
     
+    public void start(@Observes BundleContainerEvents.BundleContainerInitialized evt) {
+        System.out.println("Yeah bro !!!");
+    }
+    
     public void done(@Observes @Specification(NoteDoneEvent.class) InterBundleEvent evt) {
         NoteDoneEvent nde = (NoteDoneEvent) evt.get();
         System.out.println("Tweeting that task : " + nde.title + " is done !!!");
+    }
+
+    @Override
+    public String icon() {
+        return "icon-ok";
     }
 }

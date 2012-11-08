@@ -11,6 +11,8 @@ public interface Plugin {
     
     public String desc();
     
+    public String icon();
+    
     public String apply(String content);
     
     public Map<String, File> resources();
