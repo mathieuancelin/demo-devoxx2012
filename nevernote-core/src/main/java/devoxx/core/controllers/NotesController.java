@@ -7,6 +7,7 @@ import devoxx.core.db.NotesModel.Note;
 import devoxx.core.fwk.api.Controller;
 import devoxx.core.fwk.F;
 import devoxx.core.fwk.F.Unit;
+import devoxx.core.fwk.*;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -96,7 +97,8 @@ public class NotesController implements Controller {
                         note.done = done;
                         return Notes._.update(note);
                     } finally {
-                        if (!done) {
+                        if (note.done) {
+                            SimpleLogger.trace("Task {} is done, fire InterBundleEvent", note.id);
                             evt.fire(new InterBundleEvent(new NoteDoneEvent(note.id, note.date, note.title, note.content), NoteDoneEvent.class));
                         }
                     }
@@ -117,7 +119,8 @@ public class NotesController implements Controller {
                         note.done = !note.done;
                         return Notes._.update(note);
                     } finally {
-                        if (!note.done) {
+                        if (note.done) {
+                            SimpleLogger.trace("Task {} is done, fire InterBundleEvent", note.id);
                             evt.fire(new InterBundleEvent(new NoteDoneEvent(note.id, note.date, note.title, note.content), NoteDoneEvent.class));
                         }
                     }

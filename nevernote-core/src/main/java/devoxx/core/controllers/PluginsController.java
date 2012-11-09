@@ -3,6 +3,7 @@ package devoxx.core.controllers;
 import com.google.common.base.Joiner;
 import devoxx.core.fwk.api.Controller;
 import devoxx.api.*;
+import devoxx.core.fwk.*;
 import devoxx.api.Lang.Language;
 import devoxx.core.fwk.F.Tuple;
 import java.util.ArrayList;
@@ -116,6 +117,7 @@ public class PluginsController implements Controller {
     
     public void listenArrival(@Observes @Specification(Plugin.class) ServiceEvents.ServiceArrival evt) {
         Plugin p = evt.getService(Plugin.class);
+        SimpleLogger.info("A new plugin '{}' is available", p.name());
         if (!pluginNames.containsKey(p.pluginId())) {
             pluginNames.putIfAbsent(p.pluginId(), new Tuple<String, String>(p.name(), p.desc()));
             messages.add(new Tuple<Long, String>(System.currentTimeMillis(), "Plugin " + p.name() + " is now available for use. Enjoy ;-)"));
@@ -123,7 +125,9 @@ public class PluginsController implements Controller {
     }
     
     public void listenDeparture(@Observes @Specification(Plugin.class) ServiceEvents.ServiceDeparture evt) {
+        System.out.println("bye plugin");
         Plugin p = evt.getService(Plugin.class);
+        SimpleLogger.info("Plugin '{}' is going away ...", p.name());
         pluginNames.remove(p.pluginId());
     }
 }

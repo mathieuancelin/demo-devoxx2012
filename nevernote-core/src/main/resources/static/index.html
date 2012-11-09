@@ -117,31 +117,32 @@
                 btndoneclass = 'btn-success'
                 doneicon = 'icon-ban-circle'
             }
-            $('#tasks').append(render("#taskline_tmpl",
-                    {
-                        title:elem.title,
-                        content:elem.content,
-                        id:elem.id,
-                        doneclass:doneclass,
-                        btndoneclass:btndoneclass,
-                        doneicon:doneicon
-                    })
-            )
+            return render("#taskline_tmpl",
+                {
+                    title:elem.title,
+                    content:elem.content,
+                    id:elem.id,
+                    doneclass:doneclass,
+                    btndoneclass:btndoneclass,
+                    doneicon:doneicon
+                })
         }
 
         function updateTasks() {
-            $('#tasks').empty()
             $.get('/notes', function (data) {
                 if (data != null && data.note != null && data.note != undefined) {
                     if (data.note instanceof Array) {
+                        var content = ''
                         data.note.forEach(function (elem, array, idx) {
-                            appendTask(elem)
+                            content += appendTask(elem)
                         })
+                        $('#tasks').empty().html(content)
                     } else {
-                        appendTask(data.note)
+                        var content = appendTask(data.note)
+                        $('#tasks').empty().html(content)
                     }
                 } else {
-                    $('#tasks').append("<tr><td>No task available ...</td><td></td><td></td></tr>")
+                    $('#tasks').empty().html("<tr><td>No task available ...</td><td></td><td></td></tr>")
                 }
             })
         }

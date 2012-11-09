@@ -48,6 +48,9 @@
                 </div>
             </div>  
             <section class="container">
+                <div id="savemessage" class="hide alert alert-success">
+                    <strong>Your note has been saved</strong>
+                </div>
                 <form class="form-horizontal">
                 <div class="control-group">
                     <label class="control-label" for="inputTitle">Title</label>
@@ -80,6 +83,7 @@
                     <div class="controls">
                     <button type="button" id="delete" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
                     <button type="button" id="save" class="btn btn-primary"><i class="icon-hdd icon-white"></i> Save</button>
+                    <button type="button" id="saveback" class="btn btn-primary"><i class="icon-hdd icon-white"></i> Save and back to list</button>
                     </div>
                 </div>
                 </form>
@@ -106,17 +110,14 @@
             $(document).ready(function() {
                 
                 function updatePlugins() {
-                    $('#plugins').empty()
                     $.get('/plugins', function(data) {
                         var content = ''
                         data.forEach(function(elem, array, id) {
                             content += '<button class="btn plugin" id="' + elem.id 
                                 + '"><i class="' + elem.icon + '"></i> ' 
-                                + elem.name + '</button>'
+                                + elem.name + '</button>&nbsp;'
                         })
-                        if ($('#plugins').html() != content) {
-                            $('#plugins').html(content)
-                        }
+                        $('#plugins').empty().html(content)
                     })
                 }
                 $('.plugin').live('click', function(e) {
@@ -134,6 +135,10 @@
                         window.location.href = "/static/"
                     }})
                 })
+                var redirectId = ''
+                var redirect = function() {
+                    window.location.href = "/static/edit.html#" + redirectId
+                }
                 $('#save').click(function(e) {
                     e.preventDefault()
                     if (param() != "") {
@@ -142,8 +147,10 @@
                        var title = $('#inputTitle').val()
                        var done = $('#inputDone').is(':checked')
                        $.ajax({url:'/notes/' + id, type:'post', data: {title:title, content:content, done:done }, complete: function(data) {
-                            console.log(data)
-                            window.location.href = "/static/edit.html#" + JSON.parse(data.responseText).id 
+                            redirectId = JSON.parse(data.responseText).id
+                            $('#savemessage').show()
+                            setTimeout(function() { $('#savemessage').hide() }, 1000)
+                            //window.location.href = "/static/edit.html#" +  
                        }}) 
                     } else {
                        var content = $('#inputContent').val()
@@ -151,7 +158,31 @@
                        var done = $('#inputDone').is(':checked')
                        $.ajax({url:'/notes', type:'put', data: {title:title, content:content, done:done }, complete: function(data) {
                             console.log(data)
-                            window.location.href = "/static/edit.html#" + JSON.parse(data.responseText).id 
+                            $('#savemessage').show()
+                            setTimeout(function() { $('#savemessage').hide() }, 1000)
+                            //window.location.href = "/static/edit.html#" + data.id 
+                       }}) 
+                    }
+                    
+                })
+                $('#saveback').click(function(e) {
+                    e.preventDefault()
+                    if (param() != "") {
+                       var id = param()
+                       var content = $('#inputContent').val()
+                       var title = $('#inputTitle').val()
+                       var done = $('#inputDone').is(':checked')
+                       $.ajax({url:'/notes/' + id, type:'post', data: {title:title, content:content, done:done }, complete: function(data) {
+                            $('#savemessage').show()
+                            window.location.href = "/static/"
+                       }}) 
+                    } else {
+                       var content = $('#inputContent').val()
+                       var title = $('#inputTitle').val()
+                       var done = $('#inputDone').is(':checked')
+                       $.ajax({url:'/notes', type:'put', data: {title:title, content:content, done:done }, complete: function(data) {
+                            $('#savemessage').show()
+                            window.location.href = "/static/"
                        }}) 
                     }
                     
