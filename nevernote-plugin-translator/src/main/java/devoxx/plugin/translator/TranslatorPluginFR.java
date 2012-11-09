@@ -25,7 +25,7 @@ public class TranslatorPluginFR implements Plugin {
     }
     
     public String name() {
-        return context.getBundle().getSymbolicName() + ": French translator";
+        return "French translator";
     }
     
     public String desc() {

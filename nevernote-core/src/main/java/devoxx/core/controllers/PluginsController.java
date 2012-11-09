@@ -26,27 +26,29 @@ import org.osgi.framework.BundleException;
 
 @Path("plugins")
 public class PluginsController implements Controller {
-    
-    @Inject @Required Service<Plugin> plugins;
-    
+
+    @Inject
+    @Required
+    Service<Plugin> plugins;
     //@Inject @OSGiService @Lang(Language.EN) Plugin plugin;
-    
-    @Inject BundleContext context;
-    
+    @Inject
+    BundleContext context;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getPluginIds() {
         List<String> ids = new ArrayList<String>();
         for (Plugin plugin : plugins) {
-            ids.add("{\"id\":\"" + plugin.pluginId() 
-                    + "\", \"icon\":\"" + plugin.icon() 
-                    + "\", \"name\":\"" + plugin.name() 
+            ids.add("{\"id\":\"" + plugin.pluginId()
+                    + "\", \"icon\":\"" + plugin.icon()
+                    + "\", \"name\":\"" + plugin.name()
                     + "\", \"desc\":\"" + plugin.desc() + "\"}");
         }
         return "[" + Joiner.on(", ").join(ids) + "]";
     }
-    
-    @POST @Path("apply/{pluginId}")
+
+    @POST
+    @Path("apply/{pluginId}")
     @Produces(MediaType.TEXT_PLAIN)
     public String apply(@PathParam("pluginId") String pluginid, @FormParam("content") String content) {
         for (Plugin plugin : plugins) {
@@ -56,99 +58,108 @@ public class PluginsController implements Controller {
         }
         return "Error while processing content ...";
     }
-    
-    @GET @Path("messages")
+
+    @GET
+    @Path("messages")
     @Produces(MediaType.APPLICATION_JSON)
     public List<String> getPopupMessages(@QueryParam("since") Long since) {
         List<Tuple<Long, String>> messagesCopy = new ArrayList<Tuple<Long, String>>();
         messagesCopy.addAll(messages);
         List<String> values = new ArrayList<String>();
         for (Tuple<Long, String> t : messages) {
-           if (since == null) {
-               values.add("{\"last\":" + t._1 + ", \"message\":\""+ t._2 + "\"}");
-           } else if (t._1 > since) {
-               values.add("{\"last\":" + t._1 + ", \"message\":\""+ t._2 + "\"}");
-           }
+            if (since == null) {
+                values.add("{\"last\":" + t._1 + ", \"message\":\"" + t._2 + "\"}");
+            } else if (t._1 > since) {
+                values.add("{\"last\":" + t._1 + ", \"message\":\"" + t._2 + "\"}");
+            }
         }
         return values;
     }
-    
-    @GET @Path("active")
+
+    @GET
+    @Path("active")
     @Produces(MediaType.APPLICATION_JSON)
     public String getActivePlugins() {
         List<String> result = new ArrayList<String>();
-        for(Plugin plugin: plugins) {
-            result.add("{\"id\": \"" + plugin.pluginId() + "\", \"name\": \"" + plugin.name() + "\"}");
+        for (Plugin plugin : plugins) {
+            result.add("{\"id\": \"" + plugin.bundleId() + "\", \"name\": \"" + plugin.name() + "\"}");
         }
         return "[" + Joiner.on(',').join(result) + "]";
     }
-    
-    @GET @Path("installed")
+
+    @GET
+    @Path("installed")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInstalledPlugins() {
         List<String> result = new ArrayList<String>();
-        for(Bundle bundle : context.getBundles()) {
+        for (Bundle bundle : context.getBundles()) {
             if (bundle.getSymbolicName().contains("plugin") && bundle.getState() != Bundle.ACTIVE) {
                 result.add("{\"id\": \"" + bundle.getBundleId() + "\", \"name\": \"" + bundle.getSymbolicName() + "\"}");
             }
         }
         return "[" + Joiner.on(',').join(result) + "]";
     }
-    
+
     @GET
     @Path("{pluginId}/start")
     public Response startPlugin(@PathParam("pluginId") String pluginid) {
-      try {
-        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
-        if(bundle == null) throw new WebApplicationException(404);
-        if(bundle.getState() == Bundle.ACTIVE) throw new WebApplicationException(403);
-        bundle.start();
-        return Response.ok().build();
-      }
-      catch(NumberFormatException nfe) {
-        throw new WebApplicationException(400);
-      }
-      catch(BundleException be) {
-        throw new WebApplicationException(500);
-      }
+        try {
+            Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+            if (bundle == null) {
+                throw new WebApplicationException(404);
+            }
+            if (bundle.getState() == Bundle.ACTIVE) {
+                throw new WebApplicationException(403);
+            }
+            bundle.start();
+            return Response.ok().build();
+        } catch (NumberFormatException nfe) {
+            throw new WebApplicationException(400);
+        } catch (BundleException be) {
+            throw new WebApplicationException(500);
+        }
     }
-    
+
     @GET
     @Path("{pluginId}/stop")
     public Response stopPlugin(@PathParam("pluginId") String pluginid) {
-      try {
-        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
-        if(bundle == null) throw new WebApplicationException(404);
-        if(bundle.getState() != Bundle.ACTIVE) throw new WebApplicationException(403);
-        bundle.stop();
-        return Response.ok().build();
-      }
-      catch(NumberFormatException nfe) {
-        throw new WebApplicationException(400);
-      }
-      catch(BundleException be) {
-        throw new WebApplicationException(500);
-      }
+        try {
+            Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+            if (bundle == null) {
+                throw new WebApplicationException(404);
+            }
+            if (bundle.getState() != Bundle.ACTIVE) {
+                throw new WebApplicationException(403);
+            }
+            bundle.stop();
+            return Response.ok().build();
+        } catch (NumberFormatException nfe) {
+            throw new WebApplicationException(400);
+        } catch (BundleException be) {
+            throw new WebApplicationException(500);
+        }
     }
-    
+
     @GET
     @Path("{pluginId}/remove")
     public Response removePlugin(@PathParam("pluginId") String pluginid) {
-      try {
-        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
-        if(bundle == null) throw new WebApplicationException(404);
-        if(bundle.getState() == Bundle.UNINSTALLED) throw new WebApplicationException(403);
-        bundle.uninstall();
-        return Response.ok().build();
-      }
-      catch(NumberFormatException nfe) {
-        throw new WebApplicationException(400);
-      }
-      catch(BundleException be) {
-        throw new WebApplicationException(500);
-      }
+        try {
+            Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+            if (bundle == null) {
+                throw new WebApplicationException(404);
+            }
+            if (bundle.getState() == Bundle.UNINSTALLED) {
+                throw new WebApplicationException(403);
+            }
+            bundle.uninstall();
+            return Response.ok().build();
+        } catch (NumberFormatException nfe) {
+            throw new WebApplicationException(400);
+        } catch (BundleException be) {
+            throw new WebApplicationException(500);
+        }
     }
-    
+
     @GET
     @Path("res/{pluginId}/{route}")
     public Response getRes(@PathParam("pluginId") String pluginid, @PathParam("route") String route) {
@@ -163,13 +174,11 @@ public class PluginsController implements Controller {
         }
         throw new WebApplicationException(404);
     }
-    
     private ConcurrentHashMap<String, Tuple3<Long, String, String>> pluginNames =
             new ConcurrentHashMap<String, Tuple3<Long, String, String>>();
-    
-    private List<Tuple<Long, String>> messages = 
+    private List<Tuple<Long, String>> messages =
             Collections.synchronizedList(new ArrayList<Tuple<Long, String>>());
-    
+
     public void listenArrival(@Observes @Specification(Plugin.class) ServiceEvents.ServiceArrival evt) {
         Plugin p = evt.getService(Plugin.class);
         SimpleLogger.info("A new plugin '{}' is available", p.name());
@@ -178,7 +187,7 @@ public class PluginsController implements Controller {
             messages.add(new Tuple<Long, String>(System.currentTimeMillis(), "Plugin " + p.name() + " is now available for use. Enjoy ;-)"));
         }
     }
-    
+
     public void listenDeparture(@Observes @Specification(Plugin.class) ServiceEvents.ServiceDeparture evt) {
         System.out.println("bye plugin");
         Plugin p = evt.getService(Plugin.class);
