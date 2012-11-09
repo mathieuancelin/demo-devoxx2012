@@ -60,9 +60,6 @@
                     <td>
                         <button data-id="{{pluginId}}BtnState" class="btn {{btnStateClass}} btn-state"><i class="{{btnStateIcon}} icon-white"></i></button>
                         &nbsp;
-                        <button data-id="{{pluginId}}BtnRefresh" class="btn btn-primary btn-refresh {{btnRefreshClass}}" {{btnRefreshClass}}><i class="icon-refresh icon-white"></i>
-                        </button>
-                        &nbsp;
                         <button data-id="{{pluginId}}BtnTrash" class="btn btn-danger btn-trash"><i class="icon-trash icon-white"></i>
                         </button>
                     </td>
@@ -102,12 +99,10 @@
             var stateClass = 'error'
             var btnStateClass = 'btn-success'
             var btnStateIcon = 'icon-play'
-            var btnRefreshClass = 'disabled'
             if (elem.active == true) {
                 stateClass = 'success'
                 btnStateClass = 'btn-danger'
                 btnStateIcon = 'icon-stop'
-                btnRefreshClass = ''
             }
             $('#plugins').append(render("#pluginline_tmpl",
                     {
@@ -115,8 +110,7 @@
                         pluginName:elem.name,
                         stateClass:stateClass,
                         btnStateClass:btnStateClass,
-                        btnStateIcon:btnStateIcon,
-                        btnRefreshClass:btnRefreshClass
+                        btnStateIcon:btnStateIcon
                     }))
         }
         function updatePlugins() {
@@ -143,17 +137,23 @@
         $(".btn-state").live('click', function (e) {
             e.preventDefault()
             var id = $(this).data('id').substr(0,$(this).data('id').length - 8)
-            console.log(id)
-        })
-        $(".btn-refresh").live('click', function (e) {
-            e.preventDefault()
-            var id = $(this).data('id').substr(0,$(this).data('id').length - 10)
-            console.log(id)
+            if($(this).hasClass('btn-danger') {
+              $.get('/plugins/' + id + '/stop', function (data) {
+                updatePlugins()
+              }
+            }
+            else {
+              $.get('/plugins/' + id + '/start', function (data) {
+                updatePlugins()
+              }
+            }
         })
         $(".btn-trash").live('click', function (e) {
             e.preventDefault()
             var id = $(this).data('id').substr(0,$(this).data('id').length - 8)
-            console.log(id)
+            $.get('/plugins/' + id + '/remove', function (data) {
+              updatePlugins()
+            }
         })
     });
 </script>

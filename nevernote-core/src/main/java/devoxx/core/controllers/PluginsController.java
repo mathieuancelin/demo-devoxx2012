@@ -95,6 +95,60 @@ public class PluginsController implements Controller {
     }
     
     @GET
+    @Path("{pluginId}/start")
+    public Response startPlugin(@PathParam("pluginId") String pluginid) {
+      try {
+        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+        if(bundle == null) throw new WebApplicationException(404);
+        if(bundle.getState() == Bundle.ACTIVE) WebApplicationException(403);
+        bundle.start();
+        return Response.ok().build();
+      }
+      catch(NumberFormatException nfe) {
+        throw new WebApplicationException(400);
+      }
+      catch(BundleException be) {
+        throw new WebApplicationException(500);
+      }
+    }
+    
+    @GET
+    @Path("{pluginId}/stop")
+    public Response stopPlugin(@PathParam("pluginId") String pluginid) {
+      try {
+        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+        if(bundle == null) throw new WebApplicationException(404);
+        if(bundle.getState() != Bundle.ACTIVE) WebApplicationException(403);
+        bundle.stop();
+        return Response.ok().build();
+      }
+      catch(NumberFormatException nfe) {
+        throw new WebApplicationException(400);
+      }
+      catch(BundleException be) {
+        throw new WebApplicationException(500);
+      }
+    }
+    
+    @GET
+    @Path("{pluginId}/remove")
+    public Response removePlugin(@PathParam("pluginId") String pluginid) {
+      try {
+        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+        if(bundle == null) throw new WebApplicationException(404);
+        if(bundle.getState() == Bundle.UNINSTAL) WebApplicationException(403);
+        bundle.uninstal();
+        return Response.ok().build();
+      }
+      catch(NumberFormatException nfe) {
+        throw new WebApplicationException(400);
+      }
+      catch(BundleException be) {
+        throw new WebApplicationException(500);
+      }
+    }
+    
+    @GET
     @Path("res/{pluginId}/{route}")
     public Response getRes(@PathParam("pluginId") String pluginid, @PathParam("route") String route) {
         for (Plugin plugin : plugins) {
