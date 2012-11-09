@@ -75,11 +75,11 @@ public class PluginsController implements Controller {
     @GET @Path("active")
     @Produces(MediaType.APPLICATION_JSON)
     public String getActivePlugins() {
-        List<String> names = new ArrayList<String>();
-        for(Tuple<String, String> t : pluginNames.values()) {
-            names.add("\"" + t._1 + "\"");
+        List<String> result = new ArrayList<String>();
+        for(Plugin plugin: plugins) {
+            result.add("{\"id\": \"" + plugin.pluginId() + "\", \"name\": \"" + plugin.name() + "\"}");
         }
-        return "[" + Joiner.on(',').join(names) + "]";
+        return "[" + Joiner.on(',').join(result) + "]";
     }
     
     @GET @Path("installed")
@@ -87,7 +87,7 @@ public class PluginsController implements Controller {
     public String getInstalledPlugins() {
         List<String> names = new ArrayList<String>();
         for(Bundle bundle : context.getBundles()) {
-            if (bundle.getSymbolicName().contains("plugin")) {
+            if (bundle.getSymbolicName().contains("plugin") && bundle.getState() != Bundle.ACTIVE) {
                 names.add("\"" + bundle.getSymbolicName() + "\"");
             }
         }

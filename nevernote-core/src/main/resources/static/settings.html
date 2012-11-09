@@ -58,12 +58,12 @@
                 <tr class="{{stateClass}}">
                     <td>{{pluginName}}</td>
                     <td>
-                        <button data-id="{{pluginName}}BtnState" class="btn {{btnStateClass}} btn-state"><i class="{{btnStateIcon}} icon-white"></i></button>
+                        <button data-id="{{pluginId}}BtnState" class="btn {{btnStateClass}} btn-state"><i class="{{btnStateIcon}} icon-white"></i></button>
                         &nbsp;
-                        <button data-id="{{pluginName}}BtnRefresh" class="btn btn-primary btn-refresh {{btnRefreshClass}}"><i class="icon-refresh icon-white"></i>
+                        <button data-id="{{pluginId}}BtnRefresh" class="btn btn-primary btn-refresh {{btnRefreshClass}}" {{btnRefreshClass}}><i class="icon-refresh icon-white"></i>
                         </button>
                         &nbsp;
-                        <button data-id="{{pluginName}}BtnTrash" class="btn btn-danger btn-trash"><i class="icon-trash icon-white"></i>
+                        <button data-id="{{pluginId}}BtnTrash" class="btn btn-danger btn-trash"><i class="icon-trash icon-white"></i>
                         </button>
                     </td>
                 </tr>
@@ -105,7 +105,7 @@
             var btnStateClass = 'btn-success'
             var btnStateIcon = 'icon-play'
             var btnRefreshClass = 'disabled'
-            if (elem.active == 'true') {
+            if (elem.active == true) {
                 stateClass = 'success'
                 btnStateClass = 'btn-danger'
                 btnStateIcon = 'icon-stop'
@@ -113,6 +113,7 @@
             }
             $('#plugins').append(render("#pluginline_tmpl",
                     {
+                        pluginId:elem.id,
                         pluginName:elem.name,
                         stateClass:stateClass,
                         btnStateClass:btnStateClass,
@@ -125,14 +126,14 @@
             $.get('/plugins/installed', function (data) {
                 if (data != null && data != null && data != undefined) {
                     data.forEach(function (name, array, idx) {
-                        var elem = "{\"name\":\"" + name + "\",\"active\":\"false\"}"
+                        var elem = {id: idx, name: name ,active:false}
                         appendPlugin(elem)
                     })
                 }
                 $.get('/plugins/active', function (data) {
                     if (data != null && data != null && data != undefined) {
-                        data.forEach(function (name, array, idx) {
-                            var elem = "{\"name\":\"" + name + "\",\"active\":\"true\"}"
+                        data.forEach(function (plugin, array, idx) {
+                            var elem = {id: plugin.id, name: plugin.name, active: true}
                             appendPlugin(elem)
                         })
                     }
@@ -143,18 +144,18 @@
         updatePlugins()
         $(".btn-state").live('click', function (e) {
             e.preventDefault()
-            var name = $(this).data('id').substr(0,$(this).data('id').length - 8)
-            console.log(name)
+            var id = $(this).data('id').substr(0,$(this).data('id').length - 8)
+            console.log(id)
         })
         $(".btn-refresh").live('click', function (e) {
             e.preventDefault()
-            var name = $(this).data('id').substr(0,$(this).data('id').length - 10)
-            console.log(name)
+            var id = $(this).data('id').substr(0,$(this).data('id').length - 10)
+            console.log(id)
         })
         $(".btn-trash").live('click', function (e) {
             e.preventDefault()
-            var name = $(this).data('id').substr(0,$(this).data('id').length - 8)
-            console.log(name)
+            var id = $(this).data('id').substr(0,$(this).data('id').length - 8)
+            console.log(id)
         })
     });
 </script>
