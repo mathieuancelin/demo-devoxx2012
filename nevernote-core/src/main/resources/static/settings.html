@@ -143,7 +143,8 @@
                     btnTrashClass = 'btn-danger'
                     break;
             }
-            $('#plugins').append(render("#pluginline_tmpl",
+            //$('#plugins').append(
+            return render("#pluginline_tmpl",
                     {
                         bundleName: elem.bundleName,
                         pluginName: elem.pluginName,
@@ -154,23 +155,28 @@
                         btnStateClass: btnStateClass,
                         btnStateIcon: btnStateIcon,
                         btnTrashClass: btnTrashClass
-                    }))
+                    })
+            //)
         }
         var  updatePlugins = function() {
-            $('#plugins').empty()
+            
             $.get('/plugins/installed', function (data) {
+                var content = ''
                 if (data != null && data != null && data != undefined) {
                     data.forEach(function (plugin, array, idx) {
-                        appendPlugin(plugin)
+                        content += appendPlugin(plugin)
                     })
                 }
                 $.get('/plugins/active', function (data) {
                     if (data != null && data != null && data != undefined) {
                         data.forEach(function (plugin, array, idx) {
-                            appendPlugin(plugin)
+                            content += appendPlugin(plugin)
                         })
                     }
-                    $('#plugins').append(render("#pluginfooter_tmpl",{}))
+                    //$('#plugins').append(
+                    content += render("#pluginfooter_tmpl",{})
+                    $('#plugins').empty().html(content)
+                    //)
                 })
             })
         }
