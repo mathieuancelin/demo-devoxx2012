@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
 import org.jboss.weld.environment.osgi.api.events.Invalid;
 import org.jboss.weld.environment.osgi.api.events.Valid;
+import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
 @ApplicationScoped
@@ -25,6 +26,8 @@ public class Server {
     @Inject @Any Instance<Object> instances;
     private ServiceTracker tracker;
     private AtomicBoolean valid = new AtomicBoolean(false);
+    
+    @Inject BundleContext context;
 
     public void validate(@Observes Valid event) {
         valid.getAndSet(true);
@@ -49,7 +52,7 @@ public class Server {
         this.tracker = new HttpServiceTracker(
                 init.getBundleContext(),
                 getClass().getClassLoader(),
-                instances, CONTEXT_ROOT);
+                instances, CONTEXT_ROOT, new FileUpload(context));
         this.tracker.open();
     }
 }

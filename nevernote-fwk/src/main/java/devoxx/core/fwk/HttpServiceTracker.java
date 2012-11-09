@@ -38,14 +38,16 @@ public class HttpServiceTracker extends ServiceTracker {
     private final String contextRoot;
     private final Instance<Object> instances;
     private final ClassLoader loader;
+    private final Servlet servlet;
 
     public HttpServiceTracker(BundleContext bc, ClassLoader loader,
-            Instance<Object> instances, String contextRoot) {
+            Instance<Object> instances, String contextRoot, Servlet servlet) {
         super(bc, HttpService.class.getName(), null);
         this.bc = bc;
         this.contextRoot = contextRoot;
         this.instances = instances;
         this.loader = loader;
+        this.servlet = servlet;
     }
 
     @Override
@@ -69,8 +71,9 @@ public class HttpServiceTracker extends ServiceTracker {
     private void registerResources() {
         try {
             HttpContext myHttpContext = new OSGiHttpContext(loader);
+            httpService.registerServlet(contextRoot + "upload", servlet, null, myHttpContext);
             httpService.registerResources(contextRoot + "static", "/tmp/static", myHttpContext);
-        } catch (NamespaceException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(HttpServiceTracker.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
