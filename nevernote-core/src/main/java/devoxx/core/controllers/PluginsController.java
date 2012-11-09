@@ -22,6 +22,7 @@ import org.jboss.weld.environment.osgi.api.annotation.Specification;
 import org.jboss.weld.environment.osgi.api.events.ServiceEvents;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 @Path("plugins")
 public class PluginsController implements Controller {
@@ -85,13 +86,13 @@ public class PluginsController implements Controller {
     @GET @Path("installed")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInstalledPlugins() {
-        List<String> names = new ArrayList<String>();
+        List<String> result = new ArrayList<String>();
         for(Bundle bundle : context.getBundles()) {
             if (bundle.getSymbolicName().contains("plugin") && bundle.getState() != Bundle.ACTIVE) {
-                names.add("\"" + bundle.getSymbolicName() + "\"");
+                result.add("{\"id\": \"" + bundle.getBundleId() + "\", \"name\": \"" + bundle.getSymbolicName() + "\"}");
             }
         }
-        return "[" + Joiner.on(',').join(names) + "]";
+        return "[" + Joiner.on(',').join(result) + "]";
     }
     
     @GET
@@ -100,7 +101,7 @@ public class PluginsController implements Controller {
       try {
         Bundle bundle = context.getBundle(Long.parseLong(pluginid));
         if(bundle == null) throw new WebApplicationException(404);
-        if(bundle.getState() == Bundle.ACTIVE) WebApplicationException(403);
+        if(bundle.getState() == Bundle.ACTIVE) throw new WebApplicationException(403);
         bundle.start();
         return Response.ok().build();
       }
@@ -118,7 +119,7 @@ public class PluginsController implements Controller {
       try {
         Bundle bundle = context.getBundle(Long.parseLong(pluginid));
         if(bundle == null) throw new WebApplicationException(404);
-        if(bundle.getState() != Bundle.ACTIVE) WebApplicationException(403);
+        if(bundle.getState() != Bundle.ACTIVE) throw new WebApplicationException(403);
         bundle.stop();
         return Response.ok().build();
       }
@@ -136,8 +137,8 @@ public class PluginsController implements Controller {
       try {
         Bundle bundle = context.getBundle(Long.parseLong(pluginid));
         if(bundle == null) throw new WebApplicationException(404);
-        if(bundle.getState() == Bundle.UNINSTAL) WebApplicationException(403);
-        bundle.uninstal();
+        if(bundle.getState() == Bundle.UNINSTALLED) throw new WebApplicationException(403);
+        bundle.uninstall();
         return Response.ok().build();
       }
       catch(NumberFormatException nfe) {

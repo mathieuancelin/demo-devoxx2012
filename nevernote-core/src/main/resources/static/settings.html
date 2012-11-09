@@ -117,15 +117,16 @@
             $('#plugins').empty()
             $.get('/plugins/installed', function (data) {
                 if (data != null && data != null && data != undefined) {
-                    data.forEach(function (name, array, idx) {
-                        var elem = {id: idx, name: name ,active:false}
+                    data.forEach(function (plugin, array, idx) {
+                        var elem = {id: plugin.id, name: plugin.name,active:false}
                         appendPlugin(elem)
                     })
                 }
                 $.get('/plugins/active', function (data) {
                     if (data != null && data != null && data != undefined) {
                         data.forEach(function (plugin, array, idx) {
-                            var elem = {id: plugin.id, name: plugin.name, active: true}
+                            console.log(plugin)
+                            var elem = {id: plugin.id, name: plugin.name,active:true}
                             appendPlugin(elem)
                         })
                     }
@@ -137,23 +138,25 @@
         $(".btn-state").live('click', function (e) {
             e.preventDefault()
             var id = $(this).data('id').substr(0,$(this).data('id').length - 8)
-            if($(this).hasClass('btn-danger') {
+            console.log(id)
+            if($(this).hasClass('btn-danger')) {
               $.get('/plugins/' + id + '/stop', function (data) {
                 updatePlugins()
-              }
+              })
             }
             else {
               $.get('/plugins/' + id + '/start', function (data) {
                 updatePlugins()
-              }
+              })
             }
         })
         $(".btn-trash").live('click', function (e) {
             e.preventDefault()
             var id = $(this).data('id').substr(0,$(this).data('id').length - 8)
+            console.log(id)
             $.get('/plugins/' + id + '/remove', function (data) {
               updatePlugins()
-            }
+            })
         })
     });
 </script>
