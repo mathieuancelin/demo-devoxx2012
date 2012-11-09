@@ -1,4 +1,4 @@
-package devoxx.plugin.translator.fr;
+package devoxx.plugin.translator.sp;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.File;

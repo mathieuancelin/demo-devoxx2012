@@ -17,6 +17,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.jboss.weld.environment.osgi.api.Service;
+import org.jboss.weld.environment.osgi.api.annotation.OSGiService;
 import org.jboss.weld.environment.osgi.api.annotation.Required;
 import org.jboss.weld.environment.osgi.api.annotation.Specification;
 import org.jboss.weld.environment.osgi.api.events.ServiceEvents;
@@ -30,7 +31,9 @@ public class PluginsController implements Controller {
     @Inject
     @Required
     Service<Plugin> plugins;
-    //@Inject @OSGiService @Lang(Language.EN) Plugin plugin;
+    
+    //@Inject @OSGiService @Lang(Lang.Language.EN) Plugin plugin;
+    
     @Inject
     BundleContext context;
 
