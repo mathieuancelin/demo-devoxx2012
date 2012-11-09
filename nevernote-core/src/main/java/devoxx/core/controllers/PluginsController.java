@@ -164,8 +164,8 @@ public class PluginsController implements Controller {
         throw new WebApplicationException(404);
     }
     
-    private ConcurrentHashMap<String, Tuple<String, String>> pluginNames = 
-            new ConcurrentHashMap<String, Tuple<String, String>>();
+    private ConcurrentHashMap<Long, Tuple<String, String>> pluginNames =
+            new ConcurrentHashMap<Long, Tuple<String, String>>();
     
     private List<Tuple<Long, String>> messages = Collections.synchronizedList(new ArrayList<Tuple<Long, String>>());
     
