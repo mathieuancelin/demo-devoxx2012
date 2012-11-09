@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 @ApplicationScoped
@@ -23,6 +24,11 @@ public class UpperPlugin implements Plugin {
     @Override
     public Long bundleId() {
         return context.getBundle().getBundleId();
+    }
+
+    @Override
+    public Bundle bundle() {
+        return context.getBundle();
     }
 
     @Override

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import us.monoid.web.JSONResource;
 import us.monoid.web.Resty;
@@ -60,8 +61,14 @@ public class TranslatorPluginFR implements Plugin {
         return "icon-comment";
     }
 
+    @Override
     public Long bundleId() {
         return context.getBundle().getBundleId();
+    }
+
+    @Override
+    public Bundle bundle() {
+        return context.getBundle();
     }
 
     @Override

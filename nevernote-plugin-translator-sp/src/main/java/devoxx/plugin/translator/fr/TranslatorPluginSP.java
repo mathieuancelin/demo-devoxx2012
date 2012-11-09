@@ -9,6 +9,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 @Lang(Lang.Language.SP)
@@ -48,9 +49,15 @@ public class TranslatorPluginSP implements Plugin {
     public String icon() {
         return "icon-comment";
     }
-    
+
+    @Override
     public Long bundleId() {
         return context.getBundle().getBundleId();
+    }
+
+    @Override
+    public Bundle bundle() {
+        return context.getBundle();
     }
     
     @Override

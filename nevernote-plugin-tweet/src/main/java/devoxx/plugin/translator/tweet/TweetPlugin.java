@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.annotation.Specification;
 import org.jboss.weld.environment.osgi.api.events.InterBundleEvent;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 @ApplicationScoped
@@ -40,6 +41,11 @@ public class TweetPlugin implements Plugin {
     @Override
     public Long bundleId() {
         return context.getBundle().getBundleId();
+    }
+
+    @Override
+    public Bundle bundle() {
+        return context.getBundle();
     }
 
     @Override
