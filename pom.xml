@@ -33,6 +33,7 @@
         <module>nevernote-plugin-translator-en</module>
         <module>nevernote-plugin-translator-fr</module>
         <module>nevernote-plugin-tweet</module>
+        <module>nevernote-plugin-upper</module>
     </modules>
 
     <build>
