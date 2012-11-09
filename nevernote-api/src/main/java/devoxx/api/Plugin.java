@@ -5,7 +5,9 @@ import java.util.Map;
 
 public interface Plugin {
     
-    public Long pluginId();
+    public String pluginId();
+    
+    public Long bundleId();
     
     public String name();
     

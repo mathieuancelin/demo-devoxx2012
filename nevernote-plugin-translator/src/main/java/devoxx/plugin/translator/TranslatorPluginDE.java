@@ -6,13 +6,17 @@ import java.util.Collections;
 import java.util.Map;
 import devoxx.api.*;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
+import org.osgi.framework.BundleContext;
 
 @Lang(Lang.Language.DE)
 @Publish
 @ApplicationScoped
 public class TranslatorPluginDE implements Plugin {
+    
+    @Inject BundleContext context;
     
     public String pluginId() {
         return "german-translator";
@@ -43,5 +47,9 @@ public class TranslatorPluginDE implements Plugin {
     @Override
     public String icon() {
         return "icon-comment";
+    }
+
+    public Long bundleId() {
+        return context.getBundle().getBundleId();
     }
 }

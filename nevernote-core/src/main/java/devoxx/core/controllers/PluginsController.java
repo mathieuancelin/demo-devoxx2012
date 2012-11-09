@@ -4,8 +4,8 @@ import com.google.common.base.Joiner;
 import devoxx.core.fwk.api.Controller;
 import devoxx.api.*;
 import devoxx.core.fwk.*;
-import devoxx.api.Lang.Language;
 import devoxx.core.fwk.F.Tuple;
+import devoxx.core.fwk.F.Tuple3;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +17,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.jboss.weld.environment.osgi.api.Service;
-import org.jboss.weld.environment.osgi.api.annotation.OSGiService;
 import org.jboss.weld.environment.osgi.api.annotation.Required;
 import org.jboss.weld.environment.osgi.api.annotation.Specification;
 import org.jboss.weld.environment.osgi.api.events.ServiceEvents;
@@ -165,16 +164,17 @@ public class PluginsController implements Controller {
         throw new WebApplicationException(404);
     }
     
-    private ConcurrentHashMap<Long, Tuple<String, String>> pluginNames =
-            new ConcurrentHashMap<Long, Tuple<String, String>>();
+    private ConcurrentHashMap<String, Tuple3<Long, String, String>> pluginNames =
+            new ConcurrentHashMap<String, Tuple3<Long, String, String>>();
     
-    private List<Tuple<Long, String>> messages = Collections.synchronizedList(new ArrayList<Tuple<Long, String>>());
+    private List<Tuple<Long, String>> messages = 
+            Collections.synchronizedList(new ArrayList<Tuple<Long, String>>());
     
     public void listenArrival(@Observes @Specification(Plugin.class) ServiceEvents.ServiceArrival evt) {
         Plugin p = evt.getService(Plugin.class);
         SimpleLogger.info("A new plugin '{}' is available", p.name());
         if (!pluginNames.containsKey(p.pluginId())) {
-            pluginNames.putIfAbsent(p.pluginId(), new Tuple<String, String>(p.name(), p.desc()));
+            pluginNames.putIfAbsent(p.pluginId(), new Tuple3<Long, String, String>(p.bundleId(), p.name(), p.desc()));
             messages.add(new Tuple<Long, String>(System.currentTimeMillis(), "Plugin " + p.name() + " is now available for use. Enjoy ;-)"));
         }
     }

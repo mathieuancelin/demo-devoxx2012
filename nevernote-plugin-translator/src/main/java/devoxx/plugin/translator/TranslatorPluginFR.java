@@ -18,11 +18,10 @@ import org.osgi.framework.BundleContext;
 @ApplicationScoped
 public class TranslatorPluginFR implements Plugin {
 
-    @Inject
-    BundleContext context;
+    @Inject BundleContext context;
     
-    public Long pluginId() {
-        return context.getBundle().getBundleId();
+    public String pluginId() {
+        return "french-translator";
     }
     
     public String name() {
@@ -50,5 +49,9 @@ public class TranslatorPluginFR implements Plugin {
     @Override
     public String icon() {
         return "icon-comment";
+    }
+
+    public Long bundleId() {
+        return context.getBundle().getBundleId();
     }
 }

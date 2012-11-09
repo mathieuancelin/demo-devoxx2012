@@ -6,14 +6,18 @@ import java.util.Collections;
 import java.util.Map;
 import devoxx.api.*;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
+import org.osgi.framework.BundleContext;
 
 @Lang(Lang.Language.SP)
 @Publish
 @ApplicationScoped
 public class TranslatorPluginES implements Plugin {
     
+    @Inject BundleContext context;
+
     public String pluginId() {
         return "spanish-translator";
     }
@@ -43,5 +47,9 @@ public class TranslatorPluginES implements Plugin {
     @Override
     public String icon() {
         return "icon-comment";
+    }
+    
+    public Long bundleId() {
+        return context.getBundle().getBundleId();
     }
 }
