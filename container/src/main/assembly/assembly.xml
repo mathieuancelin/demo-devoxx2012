@@ -14,7 +14,11 @@
                 <include>devoxx:nevernote-api</include>
                 <include>devoxx:nevernote-core</include>
                 <include>devoxx:nevernote-fwk</include>
-                <include>devoxx:nevernote-plugin-translator</include>
+                <include>devoxx:nevernote-plugin-translator-en</include>
+                <include>devoxx:nevernote-plugin-translator-fr</include>
+                <include>devoxx:nevernote-plugin-translator-de</include>
+                <include>devoxx:nevernote-plugin-translator-sp</include>
+                <include>devoxx:nevernote-plugin-tweet</include>
                 <include>devoxx:wrapper</include>
                 <include>org.jboss.weld.osgi:weld-osgi-core-integration</include>
                 <include>org.jboss.weld.osgi:weld-osgi-core-api</include>

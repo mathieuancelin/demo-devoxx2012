@@ -1,4 +1,4 @@
-package devoxx.plugin.translator;
+package devoxx.plugin.translator.en;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.File;
@@ -7,34 +7,32 @@ import java.util.Map;
 import devoxx.api.*;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
-import org.jboss.weld.environment.osgi.api.events.InterBundleEvent;
 import org.osgi.framework.BundleContext;
 
-@Lang(Lang.Language.FR)
+@Lang(Lang.Language.EN)
 @Publish
 @ApplicationScoped
-public class TranslatorPluginFR implements Plugin {
-
+public class TranslatorPluginEN implements Plugin {
+    
     @Inject BundleContext context;
     
     public String pluginId() {
-        return "french-translator";
+        return "english-translator";
     }
     
     public String name() {
-        return "French translator";
+        return "English translator";
     }
     
     public String desc() {
-        return "A french translator"; 
+        return "A english translator"; 
     }
     
     public String apply(String content) {
-        String url = "https://www.googleapis.com/language/translate/v2?key=AIzaSyCbAOjY3ODiL1aB8kdXsEkcBJblX48fS5U&source=fr&target=de&q=Hello%20world";
-        return "french";
+        String url = "https://www.googleapis.com/language/translate/v2?key=AIzaSyCbAOjY3ODiL1aB8kdXsEkcBJblX48fS5U&source=en&target=de&q=Hello%20world";
+        return "english";
     }
     
     public Map<String, File> resources() {
@@ -50,8 +48,13 @@ public class TranslatorPluginFR implements Plugin {
     public String icon() {
         return "icon-comment";
     }
-
+    
     public Long bundleId() {
         return context.getBundle().getBundleId();
+    }
+    
+    @Override
+    public boolean modifyContent() {
+        return true;
     }
 }

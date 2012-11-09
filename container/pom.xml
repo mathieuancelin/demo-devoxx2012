@@ -41,7 +41,31 @@
         
         <dependency>
             <groupId>devoxx</groupId>
-            <artifactId>nevernote-plugin-translator</artifactId>
+            <artifactId>nevernote-plugin-translator-en</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>devoxx</groupId>
+            <artifactId>nevernote-plugin-translator-de</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>devoxx</groupId>
+            <artifactId>nevernote-plugin-translator-fr</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>devoxx</groupId>
+            <artifactId>nevernote-plugin-translator-sp</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>devoxx</groupId>
+            <artifactId>nevernote-plugin-tweet</artifactId>
             <version>${project.version}</version>
         </dependency>
         

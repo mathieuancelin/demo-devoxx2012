@@ -1,4 +1,4 @@
-package devoxx.plugin.translator;
+package devoxx.plugin.translator.fr;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.File;
@@ -11,28 +11,28 @@ import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
 import org.osgi.framework.BundleContext;
 
-@Lang(Lang.Language.EN)
+@Lang(Lang.Language.SP)
 @Publish
 @ApplicationScoped
-public class TranslatorPluginEN implements Plugin {
+public class TranslatorPluginSP implements Plugin {
     
     @Inject BundleContext context;
-    
+
     public String pluginId() {
-        return "english-translator";
+        return "spanish-translator";
     }
     
     public String name() {
-        return "English translator";
+        return "Spanish translator";
     }
     
     public String desc() {
-        return "A english translator"; 
+        return "A spanish translator"; 
     }
     
     public String apply(String content) {
-        String url = "https://www.googleapis.com/language/translate/v2?key=AIzaSyCbAOjY3ODiL1aB8kdXsEkcBJblX48fS5U&source=en&target=de&q=Hello%20world";
-        return "english";
+        String url = "https://www.googleapis.com/language/translate/v2?key=AIzaSyCbAOjY3ODiL1aB8kdXsEkcBJblX48fS5U&source=sp&target=de&q=Hello%20world";
+        return "spanish";
     }
     
     public Map<String, File> resources() {
@@ -51,5 +51,10 @@ public class TranslatorPluginEN implements Plugin {
     
     public Long bundleId() {
         return context.getBundle().getBundleId();
+    }
+    
+    @Override
+    public boolean modifyContent() {
+        return true;
     }
 }

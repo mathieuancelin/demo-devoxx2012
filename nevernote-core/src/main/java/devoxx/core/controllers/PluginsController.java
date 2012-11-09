@@ -39,10 +39,12 @@ public class PluginsController implements Controller {
     public String getPluginIds() {
         List<String> ids = new ArrayList<String>();
         for (Plugin plugin : plugins) {
-            ids.add("{\"id\":\"" + plugin.pluginId()
+            if (plugin.modifyContent()) {
+                ids.add("{\"id\":\"" + plugin.pluginId()
                     + "\", \"icon\":\"" + plugin.icon()
                     + "\", \"name\":\"" + plugin.name()
                     + "\", \"desc\":\"" + plugin.desc() + "\"}");
+            }
         }
         return "[" + Joiner.on(", ").join(ids) + "]";
     }

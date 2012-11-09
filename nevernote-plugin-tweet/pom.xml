@@ -10,9 +10,9 @@
         <version>1.2.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>nevernote-plugin-translator</artifactId>
+    <artifactId>nevernote-plugin-tweet</artifactId>
     <packaging>bundle</packaging>
-    <name>Nevernote :: Plugins :: Translator</name>
+    <name>Nevernote :: Plugins :: Tweet</name>
 
     <developers>
         <developer>
@@ -30,6 +30,12 @@
         <dependency>
             <groupId>devoxx</groupId>
             <artifactId>nevernote-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>devoxx</groupId>
+            <artifactId>nevernote-fwk</artifactId>
             <version>${project.version}</version>
         </dependency>
 

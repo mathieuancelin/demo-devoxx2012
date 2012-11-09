@@ -19,4 +19,6 @@ public interface Plugin {
     
     public Map<String, File> resources();
     
+    public boolean modifyContent();
+    
 }
