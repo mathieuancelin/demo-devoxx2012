@@ -87,7 +87,7 @@ public class PluginsController implements Controller {
     public String getActivePlugins() {
         List<String> result = new ArrayList<String>();
         for (Plugin plugin : plugins) {
-            result.add("{\"id\": \"" + plugin.bundleId() + "\", \"name\": \"" + plugin.name() + "\"}");
+            result.add(pluginToJSon(plugin));
         }
         return "[" + Joiner.on(',').join(result) + "]";
     }
@@ -99,10 +99,43 @@ public class PluginsController implements Controller {
         List<String> result = new ArrayList<String>();
         for (Bundle bundle : context.getBundles()) {
             if (bundle.getSymbolicName().contains("plugin") && bundle.getState() != Bundle.ACTIVE) {
-                result.add("{\"id\": \"" + bundle.getBundleId() + "\", \"name\": \"" + bundle.getSymbolicName() + "\"}");
+                result.add(bundleToJSon(bundle));
             }
         }
         return "[" + Joiner.on(',').join(result) + "]";
+    }
+
+    private String bundleToJSon(Bundle bundle) {
+        StringBuilder stringBuilder = new StringBuilder("{\"bundleId\": ").append(bundle.getBundleId())
+                .append(", \"bundleName\": \"").append(bundle.getSymbolicName())
+                .append("\", \"pluginId\": \"")
+                .append("\", \"pluginName\": \"")
+                .append("\", \"state\": \"").append(stateToString(bundle.getState()))
+                .append("\"}");
+        return stringBuilder.toString();
+    }
+
+    private String pluginToJSon(Plugin plugin) {
+        Bundle bundle = plugin.bundle();
+        StringBuilder stringBuilder = new StringBuilder("{\"bundleId\": ").append(bundle.getBundleId())
+                .append(", \"bundleName\": \"").append(bundle.getSymbolicName())
+                .append("\", \"pluginId\": \"").append(plugin.pluginId())
+                .append("\", \"pluginName\": \"").append(plugin.name())
+                .append("\", \"state\": \"").append(stateToString(bundle.getState()))
+                .append("\"}");
+        return stringBuilder.toString();
+    }
+
+    private String stateToString(int state) {
+        String result = "UNKNOWN";
+        switch (state) {
+            case Bundle.INSTALLED: result = "INSTALLED"; break;
+            case Bundle.RESOLVED: result = "INSTALLED"; break;
+            case Bundle.ACTIVE: result = "ACTIVE"; break;
+            case Bundle.STOPPING: result = "TREATING"; break;
+            case Bundle.STARTING: result = "TREATING"; break;
+        }
+        return result;
     }
 
     @GET
