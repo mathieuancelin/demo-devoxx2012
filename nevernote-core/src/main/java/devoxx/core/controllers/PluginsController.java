@@ -23,6 +23,7 @@ import org.jboss.weld.environment.osgi.api.annotation.Specification;
 import org.jboss.weld.environment.osgi.api.events.ServiceEvents;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 @Path("plugins")
 public class PluginsController implements Controller {
@@ -76,23 +77,77 @@ public class PluginsController implements Controller {
     @GET @Path("active")
     @Produces(MediaType.APPLICATION_JSON)
     public String getActivePlugins() {
-        List<String> names = new ArrayList<String>();
-        for(Tuple<String, String> t : pluginNames.values()) {
-            names.add("\"" + t._1 + "\"");
+        List<String> result = new ArrayList<String>();
+        for(Plugin plugin: plugins) {
+            result.add("{\"id\": \"" + plugin.pluginId() + "\", \"name\": \"" + plugin.name() + "\"}");
         }
-        return "[" + Joiner.on(',').join(names) + "]";
+        return "[" + Joiner.on(',').join(result) + "]";
     }
     
     @GET @Path("installed")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInstalledPlugins() {
-        List<String> names = new ArrayList<String>();
+        List<String> result = new ArrayList<String>();
         for(Bundle bundle : context.getBundles()) {
-            if (bundle.getSymbolicName().contains("plugin")) {
-                names.add("\"" + bundle.getSymbolicName() + "\"");
+            if (bundle.getSymbolicName().contains("plugin") && bundle.getState() != Bundle.ACTIVE) {
+                result.add("{\"id\": \"" + bundle.getBundleId() + "\", \"name\": \"" + bundle.getSymbolicName() + "\"}");
             }
         }
-        return "[" + Joiner.on(',').join(names) + "]";
+        return "[" + Joiner.on(',').join(result) + "]";
+    }
+    
+    @GET
+    @Path("{pluginId}/start")
+    public Response startPlugin(@PathParam("pluginId") String pluginid) {
+      try {
+        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+        if(bundle == null) throw new WebApplicationException(404);
+        if(bundle.getState() == Bundle.ACTIVE) throw new WebApplicationException(403);
+        bundle.start();
+        return Response.ok().build();
+      }
+      catch(NumberFormatException nfe) {
+        throw new WebApplicationException(400);
+      }
+      catch(BundleException be) {
+        throw new WebApplicationException(500);
+      }
+    }
+    
+    @GET
+    @Path("{pluginId}/stop")
+    public Response stopPlugin(@PathParam("pluginId") String pluginid) {
+      try {
+        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+        if(bundle == null) throw new WebApplicationException(404);
+        if(bundle.getState() != Bundle.ACTIVE) throw new WebApplicationException(403);
+        bundle.stop();
+        return Response.ok().build();
+      }
+      catch(NumberFormatException nfe) {
+        throw new WebApplicationException(400);
+      }
+      catch(BundleException be) {
+        throw new WebApplicationException(500);
+      }
+    }
+    
+    @GET
+    @Path("{pluginId}/remove")
+    public Response removePlugin(@PathParam("pluginId") String pluginid) {
+      try {
+        Bundle bundle = context.getBundle(Long.parseLong(pluginid));
+        if(bundle == null) throw new WebApplicationException(404);
+        if(bundle.getState() == Bundle.UNINSTALLED) throw new WebApplicationException(403);
+        bundle.uninstall();
+        return Response.ok().build();
+      }
+      catch(NumberFormatException nfe) {
+        throw new WebApplicationException(400);
+      }
+      catch(BundleException be) {
+        throw new WebApplicationException(500);
+      }
     }
     
     @GET
@@ -110,8 +165,8 @@ public class PluginsController implements Controller {
         throw new WebApplicationException(404);
     }
     
-    private ConcurrentHashMap<String, Tuple<String, String>> pluginNames = 
-            new ConcurrentHashMap<String, Tuple<String, String>>();
+    private ConcurrentHashMap<Long, Tuple<String, String>> pluginNames =
+            new ConcurrentHashMap<Long, Tuple<String, String>>();
     
     private List<Tuple<Long, String>> messages = Collections.synchronizedList(new ArrayList<Tuple<Long, String>>());
     

@@ -6,20 +6,27 @@ import java.util.Collections;
 import java.util.Map;
 import devoxx.api.*;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
+import org.jboss.weld.environment.osgi.api.events.InterBundleEvent;
+import org.osgi.framework.BundleContext;
 
 @Lang(Lang.Language.FR)
 @Publish
 @ApplicationScoped
 public class TranslatorPluginFR implements Plugin {
+
+    @Inject
+    BundleContext context;
     
-    public String pluginId() {
-        return "french-translator";
+    public Long pluginId() {
+        return context.getBundle().getBundleId();
     }
     
     public String name() {
-        return "French translator";
+        return context.getBundle().getSymbolicName() + ": French translator";
     }
     
     public String desc() {

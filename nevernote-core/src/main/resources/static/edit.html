@@ -65,13 +65,18 @@
                         </label>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label">Plugins</label>
-                    <div class="controls">
-                        <div id="plugins">
+                <script type="text/html" id="plugins_tmpl">
+                    <div class="control-group" id="pluginscontainer">
+                        <label class="control-label">Plugins</label>
+                        <div class="controls">
+                            <div id="plugins">
 
+                            </div>
                         </div>
                     </div>
+                </script>
+                <div id="pluginsplace">
+                    
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="inputContent">Content</label>
@@ -117,7 +122,12 @@
                                 + '"><i class="' + elem.icon + '"></i> ' 
                                 + elem.name + '</button>&nbsp;'
                         })
-                        $('#plugins').empty().html(content)
+                        if (content != '') {
+                            $('#pluginsplace').html(render('#plugins_tmpl', {nothing: ''}))
+                            $('#plugins').empty().html(content)
+                        } else {
+                            $('#pluginsplace').empty()
+                        }
                     })
                 }
                 $('.plugin').live('click', function(e) {

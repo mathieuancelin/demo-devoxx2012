@@ -53,20 +53,14 @@
         </div>
     </header>
     <section class="container">
-        <div class="span6 offset3">
+        <div>
             <script type="text/html" id="pluginline_tmpl">
                 <tr class="{{stateClass}}">
                     <td>{{pluginName}}</td>
                     <td>
-                        <button data-id="{{pluginName}}{{BtnState}}" class="btn {{btnStateClass}}"><i
-                                class="{{btnStateIcon}} icon-white"></i></button>
+                        <button data-id="{{pluginId}}BtnState" class="btn {{btnStateClass}} btn-state"><i class="{{btnStateIcon}} icon-white"></i></button>
                         &nbsp;
-                        <button data-id="{{pluginName}}{{BtnRefresh}}" class="btn btn-primary {{btnRefreshClass}}"><i
-                                class="icon-refresh icon-white"></i>
-                        </button>
-                        &nbsp;
-                        <button data-id="{{pluginName}}{{BtnRefresh}}" class="btn btn-danger"><i
-                                class="icon-trash icon-white"></i>
+                        <button data-id="{{pluginId}}BtnTrash" class="btn btn-danger btn-trash"><i class="icon-trash icon-white"></i>
                         </button>
                     </td>
                 </tr>
@@ -75,7 +69,7 @@
                 <tr class="info">
                     <td>Add a plugin</td>
                     <td>
-                        <button type="button" class="btn btn-primary"><i class="icon-folder-open"></i></button>
+                        <button type="button" class="btn btn-primary"><i class="icon-folder-open icon-white"></i></button>
                     </td>
                 </tr>
             </script>
@@ -92,11 +86,9 @@
         </div>
     </section>
 </div>
-<footer class="container">
-    <p class="pull-right">
-        Made with <a>Weld-OSGi framework</a> for <a>Devoxx 2012</a> presentation by <a>Mathieu Ancelin</a> & <a>Matthieu
-        Clochard</a>
-    </p>
+<footer class="navbar navbar-fixed-bottom" style="text-align: center">
+      Made with <a>Weld-OSGi framework</a> for <a>Devoxx 2012</a> presentation by <a>Mathieu Ancelin</a> & <a>Matthieu
+      Clochard</a>
 </footer>
 <script>
     function render(templateId, view) {
@@ -107,47 +99,65 @@
             var stateClass = 'error'
             var btnStateClass = 'btn-success'
             var btnStateIcon = 'icon-play'
-            var btnRefreshClass = 'disabled'
-            if (elem.active == 'true') {
+            if (elem.active == true) {
                 stateClass = 'success'
                 btnStateClass = 'btn-danger'
                 btnStateIcon = 'icon-stop'
-                btnRefreshClass = ''
             }
             $('#plugins').append(render("#pluginline_tmpl",
                     {
+                        pluginId:elem.id,
                         pluginName:elem.name,
                         stateClass:stateClass,
                         btnStateClass:btnStateClass,
-                        btnStateIcon:btnStateIcon,
-                        btnRefreshClass:btnStateIcon
+                        btnStateIcon:btnStateIcon
                     }))
         }
         function updatePlugins() {
             $('#plugins').empty()
             $.get('/plugins/installed', function (data) {
-                console.log("tOTO1")
                 if (data != null && data != null && data != undefined) {
-                    data.forEach(function (name, array, idx) {
-                        var elem = "{\"name\":\"" + name + "\",\"active\":\"false\"}"
+                    data.forEach(function (plugin, array, idx) {
+                        var elem = {id: plugin.id, name: plugin.name,active:false}
                         appendPlugin(elem)
                     })
                 }
                 $.get('/plugins/active', function (data) {
-                    console.log("tOTO2")
                     if (data != null && data != null && data != undefined) {
-                        data.forEach(function (name, array, idx) {
-                            var elem = "{\"name\":\"" + name + "\",\"active\":\"true\"}"
+                        data.forEach(function (plugin, array, idx) {
+                            console.log(plugin)
+                            var elem = {id: plugin.id, name: plugin.name,active:true}
                             appendPlugin(elem)
                         })
                     }
-                    console.log("tOTO3")
                     $('#plugins').append(render("#pluginfooter_tmpl",{}))
-                    console.log("tOTO4")
                 })
             })
         }
         updatePlugins()
+        $(".btn-state").live('click', function (e) {
+            e.preventDefault()
+            var id = $(this).data('id').substr(0,$(this).data('id').length - 8)
+            console.log(id)
+            if($(this).hasClass('btn-danger')) {
+              $.get('/plugins/' + id + '/stop', function (data) {
+                updatePlugins()
+              })
+            }
+            else {
+              $.get('/plugins/' + id + '/start', function (data) {
+                updatePlugins()
+              })
+            }
+        })
+        $(".btn-trash").live('click', function (e) {
+            e.preventDefault()
+            var id = $(this).data('id').substr(0,$(this).data('id').length - 8)
+            console.log(id)
+            $.get('/plugins/' + id + '/remove', function (data) {
+              updatePlugins()
+            })
+        })
     });
 </script>
 </body>
