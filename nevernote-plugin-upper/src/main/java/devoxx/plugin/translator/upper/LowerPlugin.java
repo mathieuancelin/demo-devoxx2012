@@ -15,19 +15,11 @@ import org.osgi.framework.BundleContext;
 
 @Publish
 @ApplicationScoped
-public class UpperPlugin implements Plugin {
+public class LowerPlugin implements Plugin {
     
     @Inject BundleContext context;
-    
-    @Inject Bundle bundle;
-    
-    @Inject @BundleHeaders Map<String, String> headers;
-    
-    @Inject @BundleHeader("Bundle-SymbolicName") String symbolicName;
-    
-    @Inject @BundleDataFile("dictionnary.txt") File text;
 
-    @Inject ToUpperCaseService service;
+    @Inject ToLowerCaseService service;
     
     public String apply(String content) {
         return service.toUpperCase(content);
@@ -39,7 +31,7 @@ public class UpperPlugin implements Plugin {
     
     @Override
     public String pluginId() {
-        return "upper-plugin";
+        return "lower-plugin";
     }
 
     @Override
@@ -54,17 +46,17 @@ public class UpperPlugin implements Plugin {
 
     @Override
     public String name() {
-        return "Upper plugin";
+        return "Lower plugin";
     }
 
     @Override
     public String desc() {
-        return "A upper plugin";
+        return "A Lower plugin";
     }
 
     @Override
     public String icon() {
-        return "icon-arrow-up";
+        return "icon-arrow-down";
     }
 
     @Override
