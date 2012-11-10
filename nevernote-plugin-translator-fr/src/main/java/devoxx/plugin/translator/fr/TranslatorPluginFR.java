@@ -1,11 +1,15 @@
 package devoxx.plugin.translator.fr;
 
+import com.memetix.mst.language.Language;
+import com.memetix.mst.translate.Translate;
 import javax.enterprise.context.ApplicationScoped;
 import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 import devoxx.api.*;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -13,8 +17,7 @@ import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.jboss.weld.environment.osgi.api.events.BundleContainerEvents;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import us.monoid.web.JSONResource;
-import us.monoid.web.Resty;
+import devoxx.core.fwk.Constants;
 
 @Lang(Lang.Language.FR)
 @Publish
@@ -36,13 +39,12 @@ public class TranslatorPluginFR implements Plugin {
     }
     
     public String apply(String content) {
-        String url = "https://www.googleapis.com/language/translate/v2?key=AIzaSyAE97NtcqqxxVFrvaHM39NyepZhvfHf1zk&target=fr&q=Hello%20world";
+        Translate.setClientId(Constants.clientId);
+        Translate.setClientSecret(Constants.clientSecret);
         try {
-            JSONResource jsr = new Resty().json(url);
-            String ret = (String) jsr.get("data.translations[0].translatedText");
-            return ret;
+            String translatedText = Translate.execute(content, Language.FRENCH);
+            return translatedText;
         } catch (Exception ex) {
-            ex.printStackTrace();
             return "french";
         }
     }

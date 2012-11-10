@@ -1,10 +1,13 @@
 package devoxx.plugin.translator.de;
 
+import com.memetix.mst.language.Language;
+import com.memetix.mst.translate.Translate;
 import javax.enterprise.context.ApplicationScoped;
 import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 import devoxx.api.*;
+import devoxx.core.fwk.Constants;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
@@ -32,8 +35,14 @@ public class TranslatorPluginDE implements Plugin {
     }
     
     public String apply(String content) {
-        String url = "https://www.googleapis.com/language/translate/v2?key=AIzaSyCbAOjY3ODiL1aB8kdXsEkcBJblX48fS5U&source=de&target=de&q=Hello%20world";
-        return "german";
+        Translate.setClientId(Constants.clientId);
+        Translate.setClientSecret(Constants.clientSecret);
+        try {
+            String translatedText = Translate.execute(content, Language.GERMAN);
+            return translatedText;
+        } catch (Exception ex) {
+            return "german";
+        }
     }
     
     public Map<String, File> resources() {

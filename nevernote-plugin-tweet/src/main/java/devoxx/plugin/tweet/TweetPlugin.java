@@ -1,4 +1,4 @@
-package devoxx.plugin.translator.tweet;
+package devoxx.plugin.tweet;
 
 import devoxx.api.NoteDoneEvent;
 import devoxx.api.Plugin;

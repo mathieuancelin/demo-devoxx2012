@@ -28,10 +28,8 @@ import org.osgi.framework.BundleException;
 @Path("plugins")
 public class PluginsController implements Controller {
 
-    @Inject
-    @Required
-    Service<Plugin> plugins;
-    
+    @Inject @Required Service<Plugin> plugins;
+        
     //@Inject @OSGiService @Lang(Lang.Language.EN) Plugin plugin;
     
     @Inject

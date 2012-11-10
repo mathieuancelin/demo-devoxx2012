@@ -27,6 +27,10 @@ Export-Package devoxx.core.fwk; \
                 org.apache.commons.fileupload; \
                 org.apache.commons.fileupload.*; version=1.2.2, \
                 org.apache.commons.io; \
-                org.apache.commons.io.*; version=2.3 
+                org.apache.commons.io.*; version=2.3, \
+                org.json.simple; \
+                org.json.simple.parser; version=1.1, \
+                com.memetix.mst; \
+                com.memetix.mst.*; version=0.6.1
 
 DynamicImport-Package *
