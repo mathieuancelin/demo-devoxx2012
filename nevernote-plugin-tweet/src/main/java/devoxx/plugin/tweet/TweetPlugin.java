@@ -20,18 +20,16 @@ public class TweetPlugin implements Plugin {
     
     @Inject BundleContext context;
     
+    @Inject SystemTweetService service;
+    
     public void done(@Observes @Specification(NoteDoneEvent.class) InterBundleEvent evt) {
         NoteDoneEvent nde = (NoteDoneEvent) evt.get();
-        try {
-            Runtime.getRuntime().exec(new String[] {"/usr/local/bin/growlnotify", 
-                "-n", "Nevernote", "-a", "Twitter.app", "-t", "Twitter",  "-m", 
-                "Task '" + nde.title + "' is done. \n\n'" 
-                    + nde.content + "'.\n\nNice work ;-)"}).waitFor();
-        } catch (Exception ex) {
-           // ex.printStackTrace();
-        }
-        System.out.println("Tweeting that task : " + nde.title + " is done !!!");
+        service.tweet(nde);
     }
+    
+    /***************************************/
+    /** Plugin management related methods **/
+    /***************************************/
 
     @Override
     public String pluginId() {

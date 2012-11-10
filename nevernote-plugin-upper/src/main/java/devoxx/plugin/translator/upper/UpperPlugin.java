@@ -10,12 +10,22 @@ import org.jboss.weld.environment.osgi.api.annotation.Publish;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-@ApplicationScoped
 @Publish
+@ApplicationScoped
 public class UpperPlugin implements Plugin {
     
     @Inject BundleContext context;
-
+    
+    @Inject ToUpperCaseService service;
+    
+    public String apply(String content) {
+        return service.toUpperCase(content);
+    }
+        
+    /***************************************/
+    /** Plugin management related methods **/
+    /***************************************/
+    
     @Override
     public String pluginId() {
         return "upper-plugin";
@@ -44,11 +54,6 @@ public class UpperPlugin implements Plugin {
     @Override
     public String icon() {
         return "icon-fire";
-    }
-
-    @Override
-    public String apply(String content) {
-        return content.toUpperCase();
     }
 
     @Override
