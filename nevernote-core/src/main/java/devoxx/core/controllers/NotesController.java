@@ -27,6 +27,8 @@ public class NotesController implements Controller {
     
     @Inject Event<InterBundleEvent> evt;
     
+    @Inject Notes notesDAO;
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Note> notes() {
