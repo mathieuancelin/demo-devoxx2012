@@ -13,10 +13,11 @@ import devoxx.core.fwk.F.Option;
 import devoxx.core.fwk.F.Unit;
 import java.sql.Connection;
 import java.util.List;
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
 public class NotesModel {
-    
+
     public static final DB DB = DB(provider(new Driver(), "jdbc:h2:/tmp/nevernote", "sa", ""));
 
     public static class Notes extends Table<Note> {

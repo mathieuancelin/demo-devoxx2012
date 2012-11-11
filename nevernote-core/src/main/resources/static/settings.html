@@ -18,9 +18,9 @@
             background-color: #fff;
         }
 
-        body {
-            padding-top: 60px;
-        }
+        /*body {*/
+            /*padding-top: 60px;*/
+        /*}*/
 
         .container > footer p {
             text-align: center;
@@ -36,24 +36,23 @@
                 <ul class="nav">
                     <li><a href="edit.html"><i class="icon-plus icon-white"></i> Add a new note</a></li>
                     <li><a href="settings.html"><i class="icon-wrench icon-white"></i> Plugin settings</a></li>
-                    <li><a href="#">&nbsp;&nbsp;&nbsp;Fast note &nbsp;</a></li>
-                    <li>
-                        <form class="navbar-form form-inline pull-right">
-                            <input id="fastNoteTitle" type="text" class="span2" placeholder="Title">
+                    <!--<li><a href="#">&nbsp;&nbsp;&nbsp;Fast note &nbsp;</a></li>-->
+                    <!--<li>-->
+                        <!--<form class="navbar-form form-inline pull-right">-->
+                            <!--<input id="fastNoteTitle" type="text" class="span2" placeholder="Title">-->
 
-                            <div class="input-append">
-                                <input id="fastNoteContent" type="text" class="span2" placeholder="Content">
-                                <button type="button" id="submitFastNoteButton" class="btn"><i class="icon-ok"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </li>
+                            <!--<div class="input-append">-->
+                                <!--<input id="fastNoteContent" type="text" class="span2" placeholder="Content">-->
+                                <!--<button type="button" id="submitFastNoteButton" class="btn"><i class="icon-ok"></i>-->
+                                <!--</button>-->
+                            <!--</div>-->
+                        <!--</form>-->
+                    <!--</li>-->
                 </ul>
             </div>
         </div>
     </header>
-    <section class="container">
-        <div>
+    <section class="row">
             <script type="text/html" id="pluginline_tmpl">
                 <tr class="{{stateClass}}">
                     <td>{{bundleName}}</td>
@@ -81,9 +80,9 @@
                 <thead>
                 <tr>
                     <th width="35%">Bundle</th>
-                    <th width="35%">Plugin</th>
-                    <th width="15%">State</th>
-                    <th width="15%">Actions</th>
+                    <th width="30%">Plugin</th>
+                    <th width="15%">Status</th>
+                    <th width="20%">Actions</th>
                 </tr>
                 </thead>
                 <tbody id="plugins">
@@ -97,7 +96,6 @@
                     <input class="btn" type="submit" value="Install It" />
                 </form>
             </div>
-        </div>
     </section>
 </div>
 <footer style="text-align: center">
