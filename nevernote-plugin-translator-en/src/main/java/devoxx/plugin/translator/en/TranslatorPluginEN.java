@@ -22,6 +22,16 @@ public class TranslatorPluginEN implements Plugin {
     
     @Inject BundleContext context;
     
+    @Inject TranslatorService service;
+    
+    public String apply(String content) {
+        return service.translate(content, Language.ENGLISH);
+    }
+    
+    /***************************************/
+    /** Plugin management related methods **/
+    /***************************************/
+    
     public String pluginId() {
         return "english-translator";
     }
@@ -34,26 +44,14 @@ public class TranslatorPluginEN implements Plugin {
         return "A english translator"; 
     }
     
-    public String apply(String content) {
-        Translate.setClientId(Constants.clientId);
-        Translate.setClientSecret(Constants.clientSecret);
-        try {
-            String translatedText = Translate.execute(content, Language.ENGLISH);
-            return translatedText;
-        } catch (Exception ex) {
-            return "english";
-        }
-    }
-    
     public Map<String, File> resources() {
         return Collections.emptyMap();
     }
     
     public void start(@Observes BundleContainerEvents.BundleContainerInitialized evt) {
-        System.out.println("Yeah bro !!!");
+        devoxx.core.fwk.SimpleLogger.info("Starting ...");
     }
     
-
     @Override
     public String icon() {
         return "icon-comment";

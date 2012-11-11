@@ -21,6 +21,16 @@ import org.osgi.framework.BundleContext;
 public class TranslatorPluginSP implements Plugin {
     
     @Inject BundleContext context;
+    
+    @Inject TranslatorService service;
+    
+    public String apply(String content) {
+        return service.translate(content, Language.SPANISH);
+    }
+    
+    /***************************************/
+    /** Plugin management related methods **/
+    /***************************************/
 
     public String pluginId() {
         return "spanish-translator";
@@ -33,26 +43,14 @@ public class TranslatorPluginSP implements Plugin {
     public String desc() {
         return "A spanish translator"; 
     }
-    
-    public String apply(String content) {
-        Translate.setClientId(Constants.clientId);
-        Translate.setClientSecret(Constants.clientSecret);
-        try {
-            String translatedText = Translate.execute(content, Language.SPANISH);
-            return translatedText;
-        } catch (Exception ex) {
-            return "spanish";
-        }
-    }
-    
+        
     public Map<String, File> resources() {
         return Collections.emptyMap();
     }
     
     public void start(@Observes BundleContainerEvents.BundleContainerInitialized evt) {
-        System.out.println("Yeah bro !!!");
+        devoxx.core.fwk.SimpleLogger.info("Starting ...");
     }
-    
 
     @Override
     public String icon() {

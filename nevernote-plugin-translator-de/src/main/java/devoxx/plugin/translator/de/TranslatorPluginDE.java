@@ -1,13 +1,12 @@
 package devoxx.plugin.translator.de;
 
 import com.memetix.mst.language.Language;
-import com.memetix.mst.translate.Translate;
+import devoxx.api.*;
+import devoxx.core.fwk.SimpleLogger;
 import javax.enterprise.context.ApplicationScoped;
 import java.io.File;
 import java.util.Collections;
 import java.util.Map;
-import devoxx.api.*;
-import devoxx.core.fwk.Constants;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
@@ -22,6 +21,16 @@ public class TranslatorPluginDE implements Plugin {
     
     @Inject BundleContext context;
     
+    @Inject TranslatorService service;
+    
+    public String apply(String content) {
+        return service.translate(content, Language.GERMAN);
+    }
+    
+    /***************************************/
+    /** Plugin management related methods **/
+    /***************************************/
+    
     public String pluginId() {
         return "german-translator";
     }
@@ -34,23 +43,12 @@ public class TranslatorPluginDE implements Plugin {
         return "A german translator"; 
     }
     
-    public String apply(String content) {
-        Translate.setClientId(Constants.clientId);
-        Translate.setClientSecret(Constants.clientSecret);
-        try {
-            String translatedText = Translate.execute(content, Language.GERMAN);
-            return translatedText;
-        } catch (Exception ex) {
-            return "german";
-        }
-    }
-    
     public Map<String, File> resources() {
         return Collections.emptyMap();
     }
     
     public void start(@Observes BundleContainerEvents.BundleContainerInitialized evt) {
-        System.out.println("Yeah bro !!!");
+        devoxx.core.fwk.SimpleLogger.info("Starting ...");
     }
     
 

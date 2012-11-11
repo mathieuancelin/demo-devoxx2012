@@ -1,39 +1,37 @@
-package devoxx.plugin.tweet;
+package devoxx.plugin.translator.upper;
 
-import devoxx.api.NoteDoneEvent;
 import devoxx.api.Plugin;
 import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import org.jboss.weld.environment.osgi.api.annotation.BundleDataFile;
+import org.jboss.weld.environment.osgi.api.annotation.BundleHeader;
+import org.jboss.weld.environment.osgi.api.annotation.BundleHeaders;
 import org.jboss.weld.environment.osgi.api.annotation.Publish;
-import org.jboss.weld.environment.osgi.api.annotation.Specification;
-import org.jboss.weld.environment.osgi.api.events.InterBundleEvent;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-@ApplicationScoped
 @Publish
-public class TweetPlugin implements Plugin {
+@ApplicationScoped
+public class LowerPlugin implements Plugin {
     
     @Inject BundleContext context;
+
+    @Inject ToLowerCaseService service;
     
-    @Inject SystemTweetService service;
-    
-    public void done(@Observes @Specification(NoteDoneEvent.class) InterBundleEvent evt) {
-        NoteDoneEvent nde = (NoteDoneEvent) evt.get();
-        service.tweet(nde);
+    public String apply(String content) {
+        return service.toUpperCase(content);
     }
-    
+        
     /***************************************/
     /** Plugin management related methods **/
     /***************************************/
-
+    
     @Override
     public String pluginId() {
-        return "tweet-plugin";
+        return "lower-plugin";
     }
 
     @Override
@@ -48,22 +46,17 @@ public class TweetPlugin implements Plugin {
 
     @Override
     public String name() {
-        return "Tweet plugin";
+        return "Lower plugin";
     }
 
     @Override
     public String desc() {
-        return "A tweet plugin";
+        return "A Lower plugin";
     }
 
     @Override
     public String icon() {
-        return "icon-fire";
-    }
-
-    @Override
-    public String apply(String content) {
-        return content;
+        return "icon-arrow-down";
     }
 
     @Override
@@ -73,6 +66,6 @@ public class TweetPlugin implements Plugin {
 
     @Override
     public boolean modifyContent() {
-        return false;
+        return true;
     }
 }
