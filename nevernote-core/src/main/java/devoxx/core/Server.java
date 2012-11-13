@@ -44,9 +44,9 @@ public class Server {
     public void start(@Observes BundleContainerEvents.BundleContainerInitialized init) throws Exception {
         SimpleLogger.enableColors(true);
         Boolean dev = Boolean.valueOf(System.getProperty("dev", "false"));
+        NotesModel.initDB();
         if (dev) {
             SimpleLogger.enableTrace(true);
-            NotesModel.initDB();
             SimpleLogger.info("Application stated in dev mode");
         }
         this.tracker = new HttpServiceTracker(

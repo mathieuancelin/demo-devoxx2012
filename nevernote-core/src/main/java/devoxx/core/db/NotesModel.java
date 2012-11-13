@@ -74,9 +74,9 @@ public class NotesModel {
                 ).executeUpdate();
                 
                 Notes._.insertAll(
-                    new Note(1L, "01-01-2012", "Train", "Take the train to Antverpen", false),
-                    new Note(2L, "01-01-2012", "Wristband", "Take my wristand at Devoxx registration desk on sunday evening", false),
-                    new Note(3L, "01-01-2012", "Weld-OSGi", "Do not forget to show up at the Weld-OSGi in Action session, Devoxx, Monday at 5:25PM", false)
+                    new Note(1L, "11-11-2012", "Train", "Take the train to Antverp", false),
+                    new Note(2L, "11-11-2012", "Wristband", "Take my wristand at Devoxx registration desk on sunday evening", false),
+                    new Note(3L, "12-11-2012", "Weld-OSGi", "Do not forget to show up at the Weld-OSGi in Action session, Devoxx, Monday at 5:25PM", false)
                 );  
                 return Unit.unit();
             }
