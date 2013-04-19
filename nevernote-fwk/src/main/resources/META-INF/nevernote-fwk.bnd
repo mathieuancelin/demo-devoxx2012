@@ -8,6 +8,7 @@ Import-Package !com.sun.grizzly.*,\
                !javax.persistence.*, \
                !javax.servlet.annotation.*, \
                !javax.servlet.jsp.*, \
+               com.sun.jersey.server.impl.provider
 
 Export-Package devoxx.core.fwk; \
                devoxx.core.fwk.api; \
