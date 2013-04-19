@@ -37,16 +37,16 @@
 
    <properties>
       <weld.osgi.version>1.2.0-SNAPSHOT</weld.osgi.version>
-      <osgi.version>4.2.0</osgi.version>
-      <felix.framework.version>3.0.6</felix.framework.version>
-      <felix.shell.version>1.0.2</felix.shell.version>
-      <felix.shell.text.ui.version>1.0.2</felix.shell.text.ui.version>
-      <felix.obr.version>1.2.1</felix.obr.version>
-      <felix.http.version>2.0.4</felix.http.version>
-      <felix.log.version>1.0.0</felix.log.version>
-      <felix.configadmin.version>1.2.8</felix.configadmin.version>
-      <gogo.command.version>0.4.0</gogo.command.version>
-      <gogo.runtime.version>0.4.0</gogo.runtime.version>
+      <osgi.version>4.3.1</osgi.version>
+      <felix.framework.version>4.2.1</felix.framework.version>
+      <felix.shell.version>1.4.3</felix.shell.version>
+      <felix.shell.text.ui.version>1.4.1</felix.shell.text.ui.version>
+      <felix.obr.version>1.6.6</felix.obr.version>
+      <felix.http.version>2.2.0</felix.http.version>
+      <felix.log.version>1.0.1</felix.log.version>
+      <felix.configadmin.version>1.6.0</felix.configadmin.version>
+      <gogo.command.version>0.12.0</gogo.command.version>
+      <gogo.runtime.version>0.10.0</gogo.runtime.version>
    </properties>
 
    <dependencyManagement>
@@ -105,12 +105,12 @@
             <scope>provided</scope>
          </dependency>
          <dependency>
-            <groupId>org.apache.felix.gogo</groupId>
-            <artifactId>org.apache.felix.gogo.commands</artifactId>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.command</artifactId>
             <version>${gogo.command.version}</version>
          </dependency>
          <dependency>
-            <groupId>org.apache.felix.gogo</groupId>
+            <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.gogo.runtime</artifactId>
             <version>${gogo.runtime.version}</version>
          </dependency>         
